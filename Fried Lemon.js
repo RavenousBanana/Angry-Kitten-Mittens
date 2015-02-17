@@ -927,16 +927,18 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         // Collect rewards for completed tasks and restart
         if (unsafeWindow.client.dataModel.model.ent.main.itemassignments.complete) {
             unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.forEach(function(entry) {
-                if (entry.hascompletedetails) { unsafeWindow.client.professionTaskCollectRewards(entry.uassignmentid); }
+                if (entry.hascompletedetails) {
+                    unsafeWindow.client.professionTaskCollectRewards(entry.uassignmentid);
+                }
             });
             dfdNextRun.resolve();
-            // Return false unless collecting from the completed tasks failed (possibly full inventory on the character), in which case we return true continue.
-            if (!unsafeWindow.client.dataModel.model.ent.main.itemassignments.complete) {
-                return false;
-            } else {
-                console.log("Character inventory may be full");
-                return true;
-            }
+        }
+        
+        // Check if all task rewards were successfully collected, if not then the character's inventory may be full, so we
+        // continue on to the next character
+        if (unsafeWindow.client.dataModel.model.ent.main.itemassignments.complete) {
+            console.log("Character inventory may be full"); // TODO Log the character's name
+            return false;
         }
         
         /* ******************************************************************************** */
