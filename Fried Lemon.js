@@ -192,8 +192,10 @@
 
 1.0.0.9
     - Updated mailsmithing to no longer use any bag space.
+1.1.0
+    - Added Black Ice Shaping.
 */
-var version = '1.0.0.9';
+var version = '1.1.0';
 
 console.log("Neverwinter Gateway Bot v", version + " running");
 
