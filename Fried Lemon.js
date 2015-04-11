@@ -194,8 +194,10 @@
     - Updated mailsmithing to no longer use any bag space.
 1.1.0
     - Added Black Ice Shaping.
+1.1.1
+    - Added a user defined character switch delay.
 */
-var version = '1.1.0';
+var version = '1.1.1';
 
 console.log("Neverwinter Gateway Bot v", version + " running");
 
@@ -458,6 +460,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         MINS    : 300000,
         DEFAULT : 10000, // default delay
         TIMEOUT : 60000, // delay for cycle processing timeout
+        CHAR    : parseInt(settings["delay"]),
     };
 
     /*
@@ -832,17 +835,18 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     
     // Load Settings
     var settingnames = [
-        {name: 'paused',              title: 'Pause Script',                         def: false, type:'checkbox', tooltip:'Disable All Automation'},
-        {name: 'debug',               title: 'Enable Debug',                         def: false, type:'checkbox', tooltip:'Enable all debug output to console', onsave: function(newValue, oldValue) {console=newValue?unsafeWindow.console||fouxConsole:fouxConsole;}},
-        {name: 'optionals',           title: 'Fill Optional Assets',                 def: true,  type:'checkbox', tooltip:'Enable to include selecting the optional assets of tasks'},
-        {name: 'autopurchase',        title: 'Auto Purchase Resources',              def: true,  type:'checkbox', tooltip:'Automatically purchase required resources from gateway shop (100 at a time)'},
-        {name: 'trainassets',         title: 'Train Assets',                         def: true,  type:'checkbox', tooltip:'Enable training/upgrading of asset worker resources'},
-        {name: 'refinead',            title: 'Refine AD',                            def: true,  type:'checkbox', tooltip:'Enable refining of AD on character switch'},
-        {name: 'autoreload',          title: 'Auto Reload',                          def: false, type:'checkbox', tooltip:'Enabling this will reload the gateway periodically. (Ensure Auto Login is enabled)'},
-        {name: 'autologin',           title: 'Attempt to login automatically',       def: false, type:'checkbox', tooltip:'Automatically attempt to login to the neverwinter gateway site'},
-        {name: 'nw_username',         title: '  Neverwinter Username',               def: '',    type:'text',     tooltip:''},
-        {name: 'nw_password',         title: '  Neverwinter Password',               def: '',    type:'password', tooltip:''},
-        {name: 'charcount',           title: '  Number of Characters',               def: '2',   type:'text',     tooltip:'Enter number of characters to use (reload page to update settings form)'},
+        {name: 'paused',        title: 'Pause Script',                   def: false, type:'checkbox', tooltip:'Disable All Automation'},
+        {name: 'debug',         title: 'Enable Debug',                   def: false, type:'checkbox', tooltip:'Enable all debug output to console', onsave: function(newValue, oldValue) {console=newValue?unsafeWindow.console||fouxConsole:fouxConsole;}},
+        {name: 'optionals',     title: 'Fill Optional Assets',           def: true,  type:'checkbox', tooltip:'Enable to include selecting the optional assets of tasks'},
+        {name: 'autopurchase',  title: 'Auto Purchase Resources',        def: true,  type:'checkbox', tooltip:'Automatically purchase required resources from gateway shop (100 at a time)'},
+        {name: 'trainassets',   title: 'Train Assets',                   def: true,  type:'checkbox', tooltip:'Enable training/upgrading of asset worker resources'},
+        {name: 'refinead',      title: 'Refine AD',                      def: true,  type:'checkbox', tooltip:'Enable refining of AD on character switch'},
+        {name: 'autoreload',    title: 'Auto Reload',                    def: false, type:'checkbox', tooltip:'Enabling this will reload the gateway periodically. (Ensure Auto Login is enabled)'},
+        {name: 'delay',         title: 'Character switch delay (ms)',    def: '10'.  type:'text',     tooltip: 'This is the amount of time between character switches.'},
+        {name: 'autologin',     title: 'Attempt to login automatically', def: false, type:'checkbox', tooltip:'Automatically attempt to login to the neverwinter gateway site'},
+        {name: 'nw_username',   title: '  Neverwinter Username',         def: '',    type:'text',     tooltip:''},
+        {name: 'nw_password',   title: '  Neverwinter Password',         def: '',    type:'password', tooltip:''},
+        {name: 'charcount',     title: '  Number of Characters',         def: '2',   type:'text',     tooltip:'Enter number of characters to use (reload page to update settings form)'},
     ];
     
     // Load local settings cache (unsecured)
@@ -1461,6 +1465,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             if (processCharacter()) { return; }
 
             // Switch characters as necessary
+            delay.CHAR;
             switchChar();
         }
     }
