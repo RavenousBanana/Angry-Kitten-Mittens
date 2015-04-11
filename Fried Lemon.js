@@ -816,6 +816,16 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 2:["Event_Winter_Tier1_Rankup_2", "Event_Winter_Tier1_Sparklier_Gem", "Event_Winter_Tier1_Refine_2", "Event_Winter_Tier1_Gather_2", "Event_Winter_Tier1_Shiny_Lure_Mass", "Event_Winter_Tier1_Refine", "Event_Winter_Tier1_Gather"],
             },
         },
+        {
+            taskName:"Black Ice Shaping",
+            level: {
+                1:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
+                2:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
+                3:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
+                4:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
+                5:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
+            },
+        },
     ];
     
     // Load Settings
@@ -853,17 +863,18 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     var charSettings = [];
     for (var i = 0; i < settings["charcount"]; i++) {
-        charSettings.push({name: 'nw_charname'+i,          title: 'Character',       def: 'Character '+(i+1), type:'text',     tooltip:'Characters Name'});
-        charSettings.push({name: 'Leadership'+i,           title: 'Leadership',      def: '9',                type:'text',     tooltip:'Number of slots to assign to Leadership'});
-        charSettings.push({name: 'Armorsmithing_Med'+i,    title: 'Mailsmithing',    def: '0',                type:'text',     tooltip:'Number of slots to assign to Mailsmithing'});
-        charSettings.push({name: 'Armorsmithing_Heavy'+i,  title: 'Platesmithing',   def: '0',                type:'text',     tooltip:'Number of slots to assign to Platesmithing'});
-        charSettings.push({name: 'Leatherworking'+i,       title: 'Leatherworking',  def: '0',                type:'text',     tooltip:'Number of slots to assign to Leatherworking'});
-        charSettings.push({name: 'Tailoring'+i,            title: 'Tailoring',       def: '0',                type:'text',     tooltip:'Number of slots to assign to Tailoring'});
-        charSettings.push({name: 'Artificing'+i,           title: 'Artificing',      def: '0',                type:'text',     tooltip:'Number of slots to assign to Artificing'});
-        charSettings.push({name: 'Weaponsmithing'+i,       title: 'Weaponsmithing',  def: '0',                type:'text',     tooltip:'Number of slots to assign to Weaponsmithing'});
-        charSettings.push({name: 'Alchemy'+i,              title: 'Alchemy',         def: '0',                type:'text',     tooltip:'Number of slots to assign to Alchemy'});
-        charSettings.push({name: 'Jewelcrafting'+i,        title: 'Jewelcrafting',   def: '0',                type:'text',     tooltip:'Number of slots to assign to Jewelcrafting'});
-        charSettings.push({name: 'WinterEvent'+i,          title: 'WinterEvent',     def: '0',                type:'text',     tooltip:'Number of slots to assign to WinterEvent'});
+        charSettings.push({name: 'nw_charname'+i,          title: 'Character',         def: 'Character '+(i+1), type:'text',     tooltip:'Characters Name'});
+        charSettings.push({name: 'Leadership'+i,           title: 'Leadership',        def: '9',                type:'text',     tooltip:'Number of slots to assign to Leadership'});
+        charSettings.push({name: 'Armorsmithing_Med'+i,    title: 'Mailsmithing',      def: '0',                type:'text',     tooltip:'Number of slots to assign to Mailsmithing'});
+        charSettings.push({name: 'Armorsmithing_Heavy'+i,  title: 'Platesmithing',     def: '0',                type:'text',     tooltip:'Number of slots to assign to Platesmithing'});
+        charSettings.push({name: 'Leatherworking'+i,       title: 'Leatherworking',    def: '0',                type:'text',     tooltip:'Number of slots to assign to Leatherworking'});
+        charSettings.push({name: 'Tailoring'+i,            title: 'Tailoring',         def: '0',                type:'text',     tooltip:'Number of slots to assign to Tailoring'});
+        charSettings.push({name: 'Artificing'+i,           title: 'Artificing',        def: '0',                type:'text',     tooltip:'Number of slots to assign to Artificing'});
+        charSettings.push({name: 'Weaponsmithing'+i,       title: 'Weaponsmithing',    def: '0',                type:'text',     tooltip:'Number of slots to assign to Weaponsmithing'});
+        charSettings.push({name: 'Alchemy'+i,              title: 'Alchemy',           def: '0',                type:'text',     tooltip:'Number of slots to assign to Alchemy'});
+        charSettings.push({name: 'Jewelcrafting'+i,        title: 'Jewelcrafting',     def: '0',                type:'text',     tooltip:'Number of slots to assign to Jewelcrafting'});
+        charSettings.push({name: 'BlackIce'+i,             title: 'Black Ice Shaping', def: '0',                type:'text',     tooltip:'Number of slots to assign to Black Ice Shaping'});
+        charSettings.push({name: 'WinterEvent'+i,          title: 'WinterEvent',       def: '0',                type:'text',     tooltip:'Number of slots to assign to Winter Event'});
 
         // task settings are slightly different
         charSettings.push({name: 'tasklist'+i,            title: 'Task List',      def: '',                 type:'void',     tooltip:''});
