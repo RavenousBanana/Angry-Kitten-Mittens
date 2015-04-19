@@ -460,7 +460,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         MINS    : 300000,
         DEFAULT : 10000, // default delay
         TIMEOUT : 60000, // delay for cycle processing timeout
-        CHAR    : parseInt(settings["delay"]),
     };
 
     /*
@@ -895,6 +894,8 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         LOGIN : { name: "Login", path: "div#login"},
         GUARD : { name: "Account Guard", path: "div#page-accountguard"},
     });
+    
+    delay.CHAR = parseInt(settings["delay"]);
 
     /**
      * Uses the page settings to determine which page is currently displayed
