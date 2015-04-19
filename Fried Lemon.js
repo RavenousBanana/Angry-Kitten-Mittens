@@ -842,7 +842,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         {name: 'trainassets',   title: 'Train Assets',                   def: true,  type:'checkbox', tooltip:'Enable training/upgrading of asset worker resources'},
         {name: 'refinead',      title: 'Refine AD',                      def: true,  type:'checkbox', tooltip:'Enable refining of AD on character switch'},
         {name: 'autoreload',    title: 'Auto Reload',                    def: false, type:'checkbox', tooltip:'Enabling this will reload the gateway periodically. (Ensure Auto Login is enabled)'},
-        {name: 'delay',         title: 'Character switch delay (ms)',    def: '10'.  type:'text',     tooltip: 'This is the amount of time between character switches.'},
+        {name: 'delay',         title: 'Character switch delay (ms)',    def: '10',  type:'text',     tooltip: 'This is the amount of time between character switches.'},
         {name: 'autologin',     title: 'Attempt to login automatically', def: false, type:'checkbox', tooltip:'Automatically attempt to login to the neverwinter gateway site'},
         {name: 'nw_username',   title: '  Neverwinter Username',         def: '',    type:'text',     tooltip:''},
         {name: 'nw_password',   title: '  Neverwinter Password',         def: '',    type:'password', tooltip:''},
