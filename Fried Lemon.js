@@ -12,7 +12,7 @@
 // @include        http://gatewaysitedown.playneverwinter.com/* 
 // @originalAuthor Mustex
 // @modifiedBy     Bunta, RavenousBanana
-// @version        1.1.1
+// @version        1.1.2
 // @license        http://creativecommons.org/licenses/by-nc-sa/3.0/us/
 // @grant          GM_getValue
 // @grant          GM_setValue
