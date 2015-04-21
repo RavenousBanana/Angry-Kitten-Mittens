@@ -196,8 +196,10 @@
     - Added Black Ice Shaping.
 1.1.1
     - Added a user defined character switch delay.
+1.1.2
+    - Added tasks up to rank 25 for leadership.
 */
-var version = '1.1.1';
+var version = '1.1.2';
 
 console.log("Neverwinter Gateway Bot v", version + " running");
 
@@ -503,6 +505,11 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 18:["Leadership_Tier3_13_Patrol","Leadership_Tier2_9_Chart","Leadership_Tier3_17_Deliver","Leadership_Tier3_16_Fight","Leadership_Tier1_5_Explore","Leadership_Tier2_12_Taxes","Leadership_Tier2_10_Battle"],
                 19:["Leadership_Tier3_13_Patrol","Leadership_Tier2_9_Chart","Leadership_Tier3_17_Deliver","Leadership_Tier3_16_Fight","Leadership_Tier1_5_Explore","Leadership_Tier2_12_Taxes","Leadership_Tier2_10_Battle"],
                 20:["Leadership_Tier3_20r_Master2","Leadership_Tier3_20r_Master1","Leadership_Tier3_20r_Master3","Leadership_Tier3_20_Destroy","Leadership_Tier3_17_Deliver","Leadership_Tier3_13r_Protectdiamonds","Leadership_Tier2_12_Taxes","Leadership_Tier3_16_Fight","Leadership_Tier3_13_Patrol","Leadership_Tier2_9_Chart","Leadership_Tier1_5_Explore"],
+                21:["Leadership_Tier4_21_Training","Leadership_Tier4_21_Protectmagic","Leadership_Tier3_20_Destroy"],
+                22:["Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics","Leadership_Tier4_21_Protectmagic"],
+                23:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
+                24:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
+                25:["Leadership_Tier3_20r_Master2","Leadership_Tier3_20r_Master1","Leadership_Tier3_20r_Master3","Leadership_Tier3_20_Destroy","Leadership_Tier3_17_Deliver","Leadership_Tier3_13r_Protectdiamonds","Leadership_Tier2_12_Taxes","Leadership_Tier3_16_Fight","Leadership_Tier3_13_Patrol","Leadership_Tier2_9_Chart","Leadership_Tier1_5_Explore"],
                 //19:["Patrol the Mines","Chart Region","Deliver Metals","Fight Off Spellplagued","Explore Local Area","Collect Taxes","Train a Guard","Battle Undead","Hire a Mercenary"],
                 //20:["Assault Enemy Stronghold","Follow Map to an Unknown Location","Recover Large Mineral Claim","Destroy Enemy Camp","Deliver Metals","Protect Diamond Shipment","Collect Taxes","Fight Off Spellplagued","Patrol the Mines","Chart Region","Explore Local Area"],
     
