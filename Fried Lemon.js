@@ -12,7 +12,7 @@
 // @include        http://gatewaysitedown.playneverwinter.com/* 
 // @originalAuthor Mustex
 // @modifiedBy     Bunta, RavenousBanana
-// @version        1.1.2
+// @version        1.1.3
 // @license        http://creativecommons.org/licenses/by-nc-sa/3.0/us/
 // @grant          GM_getValue
 // @grant          GM_setValue
@@ -198,8 +198,10 @@
     - Added a user defined character switch delay.
 1.1.2
     - Added tasks up to rank 25 for leadership.
+1.1.3
+    - Added Jewelcrafting up to rank 25.
 */
-var version = '1.1.2';
+var version = '1.1.3';
 
 console.log("Neverwinter Gateway Bot v", version + " running");
 
@@ -797,25 +799,29 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             level: {
                   0:["Jewelcrafting_Tier0_Intro"],
                   1:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  2:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  3:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  4:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  5:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  6:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  7:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  8:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                  9:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 10:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 11:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 12:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 13:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 14:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 15:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 16:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 17:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 18:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 19:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
-                 20:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Recruit_Journeyman","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Recruit_Journeyman","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic","Jewelcrafting_Tier1_Recruit_Apprentice"],
+                  2:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  3:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  4:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  5:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  6:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  7:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  8:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  9:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 10:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 11:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 12:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 13:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 15:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 16:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 17:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 18:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 19:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 20:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 21:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 22:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 23:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 24:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 25:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
             },
 
         },
@@ -830,6 +836,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         {
             taskName:"BlackIce",
             level: {
+                0:[],
                 1:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
                 2:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
                 3:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
