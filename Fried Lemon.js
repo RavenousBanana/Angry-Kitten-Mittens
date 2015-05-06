@@ -828,7 +828,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             },
         },
         {
-            taskName:"Black Ice Shaping",
+            taskName:"BlackIce",
             level: {
                 1:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
                 2:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
