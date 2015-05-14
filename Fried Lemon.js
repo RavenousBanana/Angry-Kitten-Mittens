@@ -12,7 +12,7 @@
 // @include        http://gatewaysitedown.playneverwinter.com/* 
 // @originalAuthor Mustex
 // @modifiedBy     Bunta, RavenousBanana
-// @version        1.1.3
+// @version        1.1.4
 // @license        http://creativecommons.org/licenses/by-nc-sa/3.0/us/
 // @grant          GM_getValue
 // @grant          GM_setValue
@@ -200,8 +200,10 @@
     - Added tasks up to rank 25 for leadership.
 1.1.3
     - Added Jewelcrafting up to rank 25.
+1.1.4
+    - Fixed JCing and modified leadership to produce more RP rather than all AD.
 */
-var version = '1.1.3';
+var version = '1.1.4';
 
 console.log("Neverwinter Gateway Bot v", version + " running");
 
@@ -511,7 +513,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 22:["Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics","Leadership_Tier4_21_Protectmagic"],
                 23:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
                 24:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
-                25:["Leadership_Tier3_20r_Master2","Leadership_Tier3_20r_Master1","Leadership_Tier3_20r_Master3","Leadership_Tier3_20_Destroy","Leadership_Tier3_17_Deliver","Leadership_Tier3_13r_Protectdiamonds","Leadership_Tier2_12_Taxes","Leadership_Tier3_16_Fight","Leadership_Tier3_13_Patrol","Leadership_Tier2_9_Chart","Leadership_Tier1_5_Explore"],
+                25:["Leadership_Tier4_25_Battleelementalcultists","Leadership_Tier4_22_Guardclerics","Leadership_Tier4_22_Guardclerics"],
+                //25:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
+                //25:["Leadership_Tier3_20r_Master2","Leadership_Tier3_20r_Master1","Leadership_Tier3_20r_Master3","Leadership_Tier3_20_Destroy","Leadership_Tier3_17_Deliver","Leadership_Tier3_13r_Protectdiamonds","Leadership_Tier2_12_Taxes","Leadership_Tier3_16_Fight","Leadership_Tier3_13_Patrol","Leadership_Tier2_9_Chart","Leadership_Tier1_5_Explore"],
                 //19:["Patrol the Mines","Chart Region","Deliver Metals","Fight Off Spellplagued","Explore Local Area","Collect Taxes","Train a Guard","Battle Undead","Hire a Mercenary"],
                 //20:["Assault Enemy Stronghold","Follow Map to an Unknown Location","Recover Large Mineral Claim","Destroy Enemy Camp","Deliver Metals","Protect Diamond Shipment","Collect Taxes","Fight Off Spellplagued","Patrol the Mines","Chart Region","Explore Local Area"],
     
@@ -743,8 +747,8 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                  1:["Alchemy_Tier1_Experiment_Rank2","Alchemy_Tier1_Experimentation_Rank1",],
                  2:["Alchemy_Tier1_Experiment_Rank3","Alchemy_Tier1_Experimentation_Rank2"],
                  3:["Alchemy_Tier1_Experiment_Rank4","Alchemy_Tier1_Experimentation_Rank3"],
-                 4:["Alchemy_Tier1_Accuracy_Potion_Minor_Mass","Alchemy_Tier1_Reflexes_Potion_Minor_Mass","Alchemy_Tier1_Force_Potion_Minor_Mass","Alchemy_Tier1_Fortification_Potion_Minor_Mass","Alchemy_Tier1_Healing_Potion_Minor_Mass","Alchemy_Tier1_Rejuvenation_Potion_Minor_Mass","Alchemy_Tier1_Tidespan_Potion_Minor_Mass","Alchemy_Tier1_Refine_Basic"],
-                 //4:["Alchemy_Tier1_Experiment_Rank5","Alchemy_Tier1_Experimentation_Rank4"],
+                 //4:["Alchemy_Tier1_Accuracy_Potion_Minor_Mass","Alchemy_Tier1_Reflexes_Potion_Minor_Mass","Alchemy_Tier1_Force_Potion_Minor_Mass","Alchemy_Tier1_Fortification_Potion_Minor_Mass","Alchemy_Tier1_Healing_Potion_Minor_Mass","Alchemy_Tier1_Rejuvenation_Potion_Minor_Mass","Alchemy_Tier1_Tidespan_Potion_Minor_Mass","Alchemy_Tier1_Refine_Basic"],
+                 4:["Alchemy_Tier1_Experiment_Rank5","Alchemy_Tier1_Experimentation_Rank4"],
                  5:["Alchemy_Tier1_Experiment_Rank6","Alchemy_Tier1_Experimentation_Rank5"],
                  6:["Alchemy_Tier1_Experiment_Rank7","Alchemy_Tier1_Experimentation_Rank6"],
                  7:["Alchemy_Tier2_Experiment_Rank08","Alchemy_Tier2_Experimentation_Rank07"],
@@ -817,11 +821,16 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                  18:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
                  19:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
                  20:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 21:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 22:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 23:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 24:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 25:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 21:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 22:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 23:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 24:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 25:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 //21:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 //22:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 //23:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 //24:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                 //25:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
             },
 
         },
