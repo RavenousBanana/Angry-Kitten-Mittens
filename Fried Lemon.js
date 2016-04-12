@@ -1180,6 +1180,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         if (accountName) {
             // load current character position and values
             charcurrent =  GM_getValue("charcurrent", 0);
+            if (charcurrent > parseInt(settings.charcount)) {
+                charcurrent = 0;
+            }
             for (var i = 0; i < (charSettings.length/settings.charcount); i++) {
                 var j = i + (charcurrent*charSettings.length/settings.charcount);
                 settings[charSettings[j].name.replace(new RegExp(charcurrent+"$"),'')] = settings[charSettings[j].name];
