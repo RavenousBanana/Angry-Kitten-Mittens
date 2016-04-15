@@ -599,6 +599,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 //19:["Plate Armor +4","Fancy Plate Pants","Fancy Plate Shirt","Plate Helm +4","Ornate Plate Pants","Upgrade Armorer","Upgrade Miner","Hire an additional Miner"],
                 //20:["Forge Steel Plates"],
                 */
+                0:["Hvy_Armorsmithing_Tier0_Intro"],
                 1:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
                 2:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
                 3:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
