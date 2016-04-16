@@ -475,10 +475,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * Some names above do not match, use below code to check:
      * var tasks = client.dataModel.model.craftinglist['craft_' + profname].entries.filter(function(entry) { return entry.def && entry.def.displayname == taskname; }); tasks[0].def.name;
      */
-    var LeatherworkingStage1 = new Array("Leatherworking_Tier1_Refine_Basic", "Leatherworking_Tier1_Gather_Basic", "Leatherworking_Tier1_Recruit_Apprentice");
-    var LeatherworkingStage2 = new Array("Leatherworking_Tier2_Refine_Basic", "Leatherworking_Tier2_Gather_Basic", "Leatherworking_Tier2_Recruit_Journeyman").concat(LeatherworkingStage1);
-    var LeatherworkingStage3 = new Array("Leatherworking_Tier3_Refine_Basic", "Leatherworking_Tier3_Gather_Basic", "Leatherworking_Tier3_Recruit_Master").concat(LeatherworkingStage2);
-
     var tasklist;
     var defaultTasklist = [
         {
@@ -509,7 +505,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 22:["Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics","Leadership_Tier4_21_Protectmagic"],
                 23:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
                 24:["Leadership_Tier4_23_Guardnoble","Leadership_Tier4_21_Training","Leadership_Tier4_22_Guardclerics"],
-                //25:["Leadership_Tier4_24_Wizardsseneschal", "Leadership_Tier4_21_Protectmagic", "Leadership_Tier3_20_Destroy"],
                 25:["Leadership_Tier4_24_Wizardsseneschal", "Leadership_Tier4_22_Guardclerics", "Leadership_Tier4_21_Protectmagic"],
             },
         },
@@ -517,6 +512,33 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             // Mailsmithing
             taskName:"Armorsmithing_Med",
             level: {
+                 0:["Med_Armorsmithing_Tier0_Intro"],
+                 1:["Med_Armorsmithing_Tier1_Refine_Basic"],
+                 2:["Med_Armorsmithing_Tier1_Refine_Basic"],
+                 3:["Med_Armorsmithing_Tier1_Refine_Basic"],
+                 4:["Med_Armorsmithing_Tier1_Refine_Basic"],
+                 5:["Med_Armorsmithing_Tier1_Refine_Basic"],
+                 6:["Med_Armorsmithing_Tier1_Refine_Basic"],
+                 7:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                 8:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                 9:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                10:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                11:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                12:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                13:["Med_Armorsmithing_Tier2_Refine_Basic"],
+                14:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                15:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                16:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                17:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                18:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                19:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                20:["Med_Armorsmithing_Tier3_Refine_Basic"],
+                21:["Med_Armorsmithing_Tier3_Gather_Basic"],
+                22:["Med_Armorsmithing_Tier3_Gather_Basic"],
+                23:["Med_Armorsmithing_Tier3_Gather_Basic"],
+                24:["Med_Armorsmithing_Tier3_Gather_Basic"],
+                25:["Med_Armorsmithing_Tier3_Gather_Basic"],
+                /*
                 0:["Med_Armorsmithing_Tier0_Intro"],
                 1:["Med_Armorsmithing_Tier1_Chain_Shirt_1_Set2","Med_Armorsmithing_Tier1_Chain_Shirt_1","Med_Armorsmithing_Tier1_Scale_Shirt_1_Set2","Med_Armorsmithing_Tier1_Scale_Shirt_1","Med_Armorsmithing_Tier1_Chain_Boots_1","Med_Armorsmithing_Tier1_Scale_Boots_1"],
                 2:["Med_Armorsmithing_Tier1_Scale_Armor_1","Med_Armorsmithing_Tier1_Chain_Armor_1"],
@@ -543,37 +565,39 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 23:["Med_Armorsmithing_Tier3_Chain_Pants","Med_Armorsmithing_Tier3_Chain_Pants_Set2"],
                 24:["Med_Armorsmithing_Tier3_Chain_Pants","Med_Armorsmithing_Tier3_Chain_Pants_Set2"],
                 25:["Med_Armorsmithing_Tier3_Refine_Basic"],
-                 /*1:["Med_Armorsmithing_Tier1_Refine_Basic","Med_Armorsmithing_Tier1_Gather_Basic_Mass"],
-                 2:["Med_Armorsmithing_Tier1_Refine_Basic","Med_Armorsmithing_Tier1_Gather_Basic_Mass"],
-                 3:["Med_Armorsmithing_Tier1_Refine_Basic","Med_Armorsmithing_Tier1_Gather_Basic_Mass"],
-                 4:["Med_Armorsmithing_Tier1_Refine_Basic","Med_Armorsmithing_Tier1_Gather_Basic_Mass"],
-                 5:["Med_Armorsmithing_Tier1_Refine_Basic","Med_Armorsmithing_Tier1_Gather_Basic_Mass"],
-                 6:["Med_Armorsmithing_Tier1_Refine_Basic","Med_Armorsmithing_Tier1_Gather_Basic_Mass"],
-                 7:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                 8:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                 9:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                10:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                11:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                12:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                13:["Med_Armorsmithing_Tier2_Refine_Basic","Med_Armorsmithing_Tier2_Gather_Basic_Mass"],
-                14:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                15:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                16:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                17:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                18:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                19:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                20:["Med_Armorsmithing_Tier3_Refine_Basic","Med_Armorsmithing_Tier3_Gather_Basic"],
-                21:["Med_Armorsmithing_Tier3_Gather_Basic"],
-                22:["Med_Armorsmithing_Tier3_Gather_Basic"],
-                23:["Med_Armorsmithing_Tier3_Gather_Basic"],
-                24:["Med_Armorsmithing_Tier3_Gather_Basic"],
-                25:["Med_Armorsmithing_Tier3_Gather_Basic"],*/
+                */
             },
         },
         {
             // Platesmithing
             taskName:"Armorsmithing_Heavy",
             level: {
+                 0:["Hvy_Armorsmithing_Tier0_Intro"],
+                 1:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
+                 2:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
+                 3:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
+                 4:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
+                 5:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
+                 6:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
+                 7:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                 8:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                 9:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                10:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                11:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                12:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                13:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
+                14:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                15:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                16:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                17:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                18:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                19:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                20:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
+                21:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
+                22:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
+                23:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
+                24:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
+                25:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
                 /*
                  0:["Hvy_Armorsmithing_Tier0_Intro"],
                  1:["Hvy_Armorsmithing_Tier1_Plate_Boots_1","Hvy_Armorsmithing_Tier1_Plate_Shirt_1","Hvy_Armorsmithing_Tier1_Shield_1"],
@@ -599,47 +623,21 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 //19:["Plate Armor +4","Fancy Plate Pants","Fancy Plate Shirt","Plate Helm +4","Ornate Plate Pants","Upgrade Armorer","Upgrade Miner","Hire an additional Miner"],
                 //20:["Forge Steel Plates"],
                 */
-                0:["Hvy_Armorsmithing_Tier0_Intro"],
-                1:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
-                2:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
-                3:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
-                4:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
-                5:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
-                6:["Hvy_Armorsmithing_Tier1_Refine_Basic"],
-                7:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                8:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                9:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                10:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                11:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                12:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                13:["Hvy_Armorsmithing_Tier2_Refine_Basic"],
-                14:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                15:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                16:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                17:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                18:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                19:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                20:["Hvy_Armorsmithing_Tier3_Refine_Basic"],
-                21:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
-                22:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
-                23:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
-                24:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
-                25:["Crafted_Hvy_Armorsmithing_T4_Refine_Basic"],
             },
         },
         {
             taskName:"Leatherworking",
             level: {
-                0:  ["Leatherworking_Tier0_Intro_1"],
-                1:["Leatherworking_Tier1_Refine_Basic"],
-                2:["Leatherworking_Tier1_Refine_Basic"],
-                3:["Leatherworking_Tier1_Refine_Basic"],
-                4:["Leatherworking_Tier1_Refine_Basic"],
-                5:["Leatherworking_Tier1_Refine_Basic"],
-                6:["Leatherworking_Tier1_Refine_Basic"],
-                7:["Leatherworking_Tier2_Refine_Basic"],
-                8:["Leatherworking_Tier2_Refine_Basic"],
-                9:["Leatherworking_Tier2_Refine_Basic"],
+                 0:  ["Leatherworking_Tier0_Intro_1"],
+                 1:["Leatherworking_Tier1_Refine_Basic"],
+                 2:["Leatherworking_Tier1_Refine_Basic"],
+                 3:["Leatherworking_Tier1_Refine_Basic"],
+                 4:["Leatherworking_Tier1_Refine_Basic"],
+                 5:["Leatherworking_Tier1_Refine_Basic"],
+                 6:["Leatherworking_Tier1_Refine_Basic"],
+                 7:["Leatherworking_Tier2_Refine_Basic"],
+                 8:["Leatherworking_Tier2_Refine_Basic"],
+                 9:["Leatherworking_Tier2_Refine_Basic"],
                 10:["Leatherworking_Tier2_Refine_Basic"],
                 11:["Leatherworking_Tier2_Refine_Basic"],
                 12:["Leatherworking_Tier2_Refine_Basic"],
@@ -689,6 +687,33 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             taskName:"Tailoring",
             level: {
                  0:["Tailoring_Tier0_Intro"],
+                 1:["Tailoring_Tier1_Refine_Basic"],
+                 2:["Tailoring_Tier1_Refine_Basic"],
+                 3:["Tailoring_Tier1_Refine_Basic"],
+                 4:["Tailoring_Tier1_Refine_Basic"],
+                 5:["Tailoring_Tier1_Refine_Basic"],
+                 6:["Tailoring_Tier1_Refine_Basic"],
+                 7:["Tailoring_Tier2_Refine_Basic"],
+                 8:["Tailoring_Tier2_Refine_Basic"],
+                 9:["Tailoring_Tier2_Refine_Basic"],
+                10:["Tailoring_Tier2_Refine_Basic"],
+                11:["Tailoring_Tier2_Refine_Basic"],
+                12:["Tailoring_Tier2_Refine_Basic"],
+                13:["Tailoring_Tier2_Refine_Basic"],
+                14:["Tailoring_Tier3_Refine_Basic"],
+                15:["Tailoring_Tier3_Refine_Basic"],
+                16:["Tailoring_Tier3_Refine_Basic"],
+                17:["Tailoring_Tier3_Refine_Basic"],
+                18:["Tailoring_Tier3_Refine_Basic"],
+                19:["Tailoring_Tier3_Refine_Basic"],
+                20:["Tailoring_Tier3_Refine_Basic"],
+                21:["Tailoring_Tier4_Refine_Basic"],
+                22:["Tailoring_Tier4_Refine_Basic"],
+                23:["Tailoring_Tier4_Refine_Basic"],
+                24:["Tailoring_Tier4_Refine_Basic"],
+                25:["Tailoring_Tier4_Refine_Basic"],
+                /*
+                 0:["Tailoring_Tier0_Intro"],
                  1:["Tailoring_Tier1_Cloth_Boots_1","Tailoring_Tier1_Cloth_Shirt_1"],
                  2:["Tailoring_Tier1_Cloth_Armor_1","Tailoring_Tier1_Cloth_Pants_1"],
                  3:["Tailoring_Tier1_Cloth_Armor_1","Tailoring_Tier1_Cloth_Boots_Set_1"],
@@ -711,11 +736,39 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 20:["Tailoring_Tier2_Refine_Basic"],
                 //19:["Cloth Robes +4","Fancy Cloth Pants","Fancy Cloth Shirt","Cloth Cap +4","Ornate Cloth Pants","Upgrade Outfitter","Upgrade Weaver","Hire an additional Weaver"],
                 //20:["Weave Cotton Cloth"],
+                */
             },
         },
         {
             taskName:"Artificing",
             level: {
+                  0:["Artificing_Tier0_Intro_1"],
+                  1:["Artificing_Tier1_Gather_Basic"],
+                  2:["Artificing_Tier1_Gather_Basic"],
+                  3:["Artificing_Tier1_Gather_Basic"],
+                  4:["Artificing_Tier1_Gather_Basic"],
+                  5:["Artificing_Tier1_Gather_Basic"],
+                  6:["Artificing_Tier1_Gather_Basic"],
+                  7:["Artificing_Tier2_Gather_Basic"],
+                  8:["Artificing_Tier2_Gather_Basic"],
+                  9:["Artificing_Tier2_Gather_Basic"],
+                 10:["Artificing_Tier2_Gather_Basic"],
+                 11:["Artificing_Tier2_Gather_Basic"],
+                 12:["Artificing_Tier2_Gather_Basic"],
+                 13:["Artificing_Tier2_Gather_Basic"],
+                 14:["Artificing_Tier3_Gather_Basic"],
+                 15:["Artificing_Tier3_Gather_Basic"],
+                 16:["Artificing_Tier3_Gather_Basic"],
+                 17:["Artificing_Tier3_Gather_Basic"],
+                 18:["Artificing_Tier3_Gather_Basic"],
+                 19:["Artificing_Tier3_Gather_Basic"],
+                 20:["Artificing_Tier3_Gather_Basic"],
+                 21:["Artificing_Tier4_Gather_Basic"],
+                 22:["Artificing_Tier4_Gather_Basic"],
+                 23:["Artificing_Tier4_Gather_Basic"],
+                 24:["Artificing_Tier4_Gather_Basic"],
+                 25:["Artificing_Tier4_Gather_Basic"],
+                 /*
                  0:["Artificing_Tier0_Intro_1"],
                  1:["Artificing_Tier1_Symbol_Virtuous_1"],
                  2:["Artificing_Tier1_Icon_Virtuous_1"],
@@ -739,11 +792,39 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 20:["Artificing_Tier2_Refine_Basic"],
                 //19:["Virtuous Icon +5","Upgrade Engraver","Upgrade Carver","Hire an additional Carver"],
                 //20:["7:Craft Ornamental metal and Carved Wood"],
+                */
             },
         },
         {
             taskName:"Weaponsmithing",
             level: {
+                 0:["Weaponsmithing_Tier0_Intro_1"],
+                 1:["Weaponsmithing_Tier1_Refine_Basic"],
+                 2:["Weaponsmithing_Tier1_Refine_Basic"],
+                 3:["Weaponsmithing_Tier1_Refine_Basic"],
+                 4:["Weaponsmithing_Tier1_Refine_Basic"],
+                 5:["Weaponsmithing_Tier1_Refine_Basic"],
+                 6:["Weaponsmithing_Tier1_Refine_Basic"],
+                 7:["Weaponsmithing_Tier2_Refine_Basic"],
+                 8:["Weaponsmithing_Tier2_Refine_Basic"],
+                 9:["Weaponsmithing_Tier2_Refine_Basic"],
+                10:["Weaponsmithing_Tier2_Refine_Basic"],
+                11:["Weaponsmithing_Tier2_Refine_Basic"],
+                12:["Weaponsmithing_Tier2_Refine_Basic"],
+                13:["Weaponsmithing_Tier2_Refine_Basic"],
+                14:["Weaponsmithing_Tier3_Refine_Basic"],
+                15:["Weaponsmithing_Tier3_Refine_Basic"],
+                16:["Weaponsmithing_Tier3_Refine_Basic"],
+                17:["Weaponsmithing_Tier3_Refine_Basic"],
+                18:["Weaponsmithing_Tier3_Refine_Basic"],
+                19:["Weaponsmithing_Tier3_Refine_Basic"],
+                20:["Weaponsmithing_Tier3_Refine_Basic"],
+                21:["Weaponsmithing_Tier4_Refine_Basic"],
+                22:["Weaponsmithing_Tier4_Refine_Basic"],
+                23:["Weaponsmithing_Tier4_Refine_Basic"],
+                24:["Weaponsmithing_Tier4_Refine_Basic"],
+                25:["Weaponsmithing_Tier4_Refine_Basic"],
+                /*
                  0:["Weaponsmithing_Tier0_Intro"],
                  1:["Weaponsmithing_Tier1_Dagger_1"],
                  2:["Weaponsmithing_Tier1_Dagger_1"],
@@ -767,6 +848,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 20:["Weaponsmithing_Tier2_Refine_Basic"],
                 //19:["Dagger+4","Upgrade Grinder","Upgrade Smelter","Hire an additional Smelter"],
                 //20:["Craft Steel Blades and Barausk Hafts"],
+                */
             },
         },
         {
@@ -837,36 +919,31 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             taskName:"Jewelcrafting",
             level: {
                   0:["Jewelcrafting_Tier0_Intro"],
-                  1:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  2:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  3:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  4:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  5:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  6:["Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  7:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  8:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                  9:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 10:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 11:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 12:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 13:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 14:["Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 15:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 16:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 17:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 18:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 19:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 20:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 21:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 22:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 23:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 24:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 //25:["Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 //21:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 //22:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 //23:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 //24:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
-                 25:["Jewelcrafting_Tier4_Refine_Basic","Jewelcrafting_Tier4_Gather_Basic","Jewelcrafting_Tier3_Refine_Basic","Jewelcrafting_Tier3_Gather_Basic","Jewelcrafting_Tier2_Refine_Basic","Jewelcrafting_Tier2_Gather_Basic","Jewelcrafting_Tier1_Refine_Basic","Jewelcrafting_Tier1_Gather_Basic"],
+                  1:["Jewelcrafting_Tier1_Refine_Basic"],
+                  2:["Jewelcrafting_Tier1_Refine_Basic"],
+                  3:["Jewelcrafting_Tier1_Refine_Basic"],
+                  4:["Jewelcrafting_Tier1_Refine_Basic"],
+                  5:["Jewelcrafting_Tier1_Refine_Basic"],
+                  6:["Jewelcrafting_Tier1_Refine_Basic"],
+                  7:["Jewelcrafting_Tier2_Refine_Basic"],
+                  8:["Jewelcrafting_Tier2_Refine_Basic"],
+                  9:["Jewelcrafting_Tier2_Refine_Basic"],
+                 10:["Jewelcrafting_Tier2_Refine_Basic"],
+                 11:["Jewelcrafting_Tier2_Refine_Basic"],
+                 12:["Jewelcrafting_Tier2_Refine_Basic"],
+                 13:["Jewelcrafting_Tier2_Refine_Basic"],
+                 14:["Jewelcrafting_Tier3_Refine_Basic"],
+                 15:["Jewelcrafting_Tier3_Refine_Basic"],
+                 16:["Jewelcrafting_Tier3_Refine_Basic"],
+                 17:["Jewelcrafting_Tier3_Refine_Basic"],
+                 18:["Jewelcrafting_Tier3_Refine_Basic"],
+                 19:["Jewelcrafting_Tier3_Refine_Basic"],
+                 20:["Jewelcrafting_Tier3_Refine_Basic"],
+                 21:["Jewelcrafting_Tier4_Refine_Basic"],
+                 22:["Jewelcrafting_Tier4_Refine_Basic"],
+                 23:["Jewelcrafting_Tier4_Refine_Basic"],
+                 24:["Jewelcrafting_Tier4_Refine_Basic"],
+                 25:["Jewelcrafting_Tier4_Refine_Basic"],
             },
 
         },
@@ -882,11 +959,11 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             taskName:"BlackIce",
             level: {
                 0:[],
-                1:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
-                2:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
-                3:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
-                4:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
-                5:["Blackice_Tier1_Mass_Process_Blackice", "Blackice_Tier1_Process_Blackice"],
+                1:["Blackice_Tier1_Mass_Process_Blackice","Blackice_Tier1_Process_Blackice","Blackice_Tier1_Hire_Chillwright"],
+                2:["Blackice_Tier1_Mass_Process_Blackice","Blackice_Tier1_Process_Blackice","Blackice_Tier1_Hire_Chillwright"],
+                3:["Blackice_Tier1_Mass_Process_Blackice","Blackice_Tier1_Process_Blackice","Blackice_Tier1_Hire_Chillwright"],
+                4:["Blackice_Tier1_Mass_Process_Blackice","Blackice_Tier1_Process_Blackice","Blackice_Tier1_Hire_Chillwright"],
+                5:["Blackice_Tier1_Mass_Process_Blackice","Blackice_Tier1_Process_Blackice","Blackice_Tier1_Hire_Chillwright"],
             },
         },
     ];
@@ -922,11 +999,11 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
     }
     
-    if (settings["charcount"]<1) { settings["charcount"] = 1; }
-    if (settings["charcount"]>99) { settings["charcount"] = 99; }
+    if (settings.charcount<1) { settings.charcount = 1; }
+    if (settings.charcount>99) { settings.charcount = 99; }
 
     var charSettings = [];
-    for (var i = 0; i < settings["charcount"]; i++) {
+    for (var i = 0; i < settings.charcount; i++) {
         charSettings.push({name: 'nw_charname'+i,          title: 'Character',         def: 'Character '+(i+1), type:'text',     tooltip:'Characters Name'});
         charSettings.push({name: 'Leadership'+i,           title: 'Leadership',        def: '9',                type:'text',     tooltip:'Number of slots to assign to Leadership'});
         charSettings.push({name: 'Armorsmithing_Med'+i,    title: 'Mailsmithing',      def: '0',                type:'text',     tooltip:'Number of slots to assign to Mailsmithing'});
@@ -954,14 +1031,14 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         GUARD : { name: "Account Guard", path: "div#page-accountguard"},
     });
     
-    delay.CHAR = parseInt(settings["delay"]);
+    delay.CHAR = parseInt(settings.delay);
 
     /**
      * Uses the page settings to determine which page is currently displayed
      */
     function GetCurrentPage() {
         for each(var page in PAGES) {
-            if ($(page["path"]).filter(":visible").length) {
+            if ($(page.path).filter(":visible").length) {
                 return page;
             }
         }
@@ -972,12 +1049,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * No client.dataModel exists at this stage
      */
     function page_LOGIN() {
-        //if (!$("form > p.error:visible").length && settings["autologin"]) {
+        //if (!$("form > p.error:visible").length && settings.autologin) {
             // No previous log in error - attempt to log in
             console.log("Setting username");
-            $("input#user").val(settings["nw_username"]);
+            $("input#user").val(settings.nw_username);
             console.log("Setting password");
-            $("input#pass").val(settings["nw_password"]);
+            $("input#pass").val(settings.nw_password);
             console.log("Clicking Login Button");
             $("div#login > input").click();
         //}
@@ -1074,10 +1151,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             switchChar();
             return false;
         }
-        console.log(list)
-        console.log(prof.taskName, "is level", level);
-        console.log("createNextTask", list.length, i);
-
         var taskName = list[i];
         console.log("Searching for task:", taskName);
         
@@ -1114,7 +1187,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 // Click all buttons and select an item to use in the slot
                 var def = $.Deferred();
                 var buttonList = $("h3:contains('Optional Assets:')").closest("div").find("button");
-                if (buttonList.length && settings["optionals"]) {
+                if (buttonList.length && settings.optionals) {
                     SelectItemFor(buttonList, 0, def, prof);
                 }
                 else {
@@ -1193,7 +1266,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             // Missing required assets
             if (failedAssets.length) {
                 var failedCrafter = failedAssets.filter(function(entry) { return entry.categories.indexOf("Person") >= 0; });
-                if (failedCrafter.length && settings["trainassets"]) {
+                if (failedCrafter.length && settings.trainassets) {
                     console.log("Found required asset:", failedCrafter[0].icon);
                     searchItem = failedCrafter[0].icon;
                     searchAsset = true;
@@ -1216,7 +1289,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 
                 // purchase buyable resources
                 if (itemName.match(/^Crafting_Resource_(Charcoal|Rocksalt|Spool_Thread|Porridge|Solvent|Brimstone|Coal|Moonseasalt|Quicksilver|Spool_Threadsilk)$/)) {
-                    if (settings["autopurchase"]) {
+                    if (settings.autopurchase) {
                         buyResource(itemName);
                         return null;
                     }
@@ -1294,6 +1367,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      *
      * @param {string} taskDetail The craftindetail object for the task to be started
      */
+     /*
     function startTask(taskDetail) {
         return;
         
@@ -1301,6 +1375,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         //client.dataModel.addDefaultResources();
         client.professionStartAssignment(taskDetail.def.name);
     }
+    */
 
     /**
      * Selects the highest level asset for the i'th button in the list. Uses an iterative approach
@@ -1384,7 +1459,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     }
     
     function switchChar() {
-        if (settings["refinead"]) {
+        if (settings.refinead) {
             var _currencies = unsafeWindow.client.dataModel.model.ent.main.currencies;
             if (_currencies.diamondsconvertleft && _currencies.roughdiamonds) {
                 console.log("Refining AD");
@@ -1393,7 +1468,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
 
         console.log("Switching Characters");
-        if (++charcurrent >= settings["charcount"]) { charcurrent = 0; }
+        if (++charcurrent >= settings.charcount) { charcurrent = 0; }
         GM_setValue("charcurrent", charcurrent);
         dfdNextRun.resolve(delay.SHORT);
     }
@@ -1445,11 +1520,11 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         addSettings();
 
         // Enable/Disable the unconditional page reload depending on settings
-        loading_reset = settings["autoreload"]; 
+        loading_reset = settings.autoreload; 
 
         // Check if timer is paused
-        s_paused = settings["paused"]; // let the Page Reloading function know the pause state
-        if (settings["paused"]) {
+        s_paused = settings.paused; // let the Page Reloading function know the pause state
+        if (settings.paused) {
             // Just continue later - the deferred object is still set and nothing will resolve it until we get past this point
             var timerHandle = window.setTimeout(function() {process();}, delay.DEFAULT);
             return;
@@ -1490,8 +1565,8 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
         
         // Check if timer is paused again to avoid starting new task between timers
-        s_paused = settings["paused"]; // let the Page Reloading function know the pause state
-        if (settings["paused"]) {
+        s_paused = settings.paused; // let the Page Reloading function know the pause state
+        if (settings.paused) {
             // Just continue later - the deferred object is still set and nothing will resolve it until we get past this point
             var timerHandle = window.setTimeout(function() {process();}, delay.DEFAULT);
             return;
@@ -1500,20 +1575,20 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         if (accountName) {
             // load current character position and values
             charcurrent =  GM_getValue("charcurrent", 0);
-            for (var i = 0; i < (charSettings.length/settings["charcount"]); i++) {
-                j = i + (charcurrent*charSettings.length/settings["charcount"]);
+            for (var i = 0; i < (charSettings.length/settings.charcount); i++) {
+                var j = i + (charcurrent*charSettings.length/settings.charcount);
                 settings[charSettings[j].name.replace(new RegExp(charcurrent+"$"),'')] = settings[charSettings[j].name];
             }
             
             // Load task list from settings if saved
-            if (settings["tasklist"].length) {
-                tasklist = JSON.parse(settings["tasklist"]);
+            if (settings.tasklist.length) {
+                tasklist = JSON.parse(settings.tasklist);
             }
             else {
                 tasklist = defaultTasklist;
             }
 
-            var charName = settings["nw_charname"];
+            var charName = settings.nw_charname;
             var fullCharName = charName + '@' + accountName;
 
             if (unsafeWindow.client.getCurrentCharAtName() != fullCharName) {
@@ -1576,19 +1651,19 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             var indent = countLeadingSpaces(settingnames[i].title) * 2;
             switch(settingnames[i].type) {
                 case "checkbox":
-                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><input style="margin:4px" name="'+id+'" id="'+id+'" type="checkbox" /><label class="'+settingnames[i].class+'" for="'+id+'">'+settingnames[i].title+'</label></li>')
+                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><input style="margin:4px" name="'+id+'" id="'+id+'" type="checkbox" /><label class="'+settingnames[i].class+'" for="'+id+'">'+settingnames[i].title+'</label></li>');
                     $('#'+id).prop('checked', settings[settingnames[i].name]);
                     break;
                 case "text":
-                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><label class="'+settingnames[i].class+'" for="'+id+'">'+settingnames[i].title+'</label><input style="margin:4px" name="'+id+'" id="'+id+'" type="text" /></li>')
+                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><label class="'+settingnames[i].class+'" for="'+id+'">'+settingnames[i].title+'</label><input style="margin:4px" name="'+id+'" id="'+id+'" type="text" /></li>');
                     $('#'+id).val(settings[settingnames[i].name]);
                     break;
                 case "password":
-                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><label class="'+settingnames[i].class+'" for="'+id+'">'+settingnames[i].title+'</label><input style="margin:4px" name="'+id+'" id="'+id+'" type="password" /></li>')
+                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><label class="'+settingnames[i].class+'" for="'+id+'">'+settingnames[i].title+'</label><input style="margin:4px" name="'+id+'" id="'+id+'" type="password" /></li>');
                     $('#'+id).val(settings[settingnames[i].name]);
                     break;
                 case "select":
-                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><label class="'+settingnames[i].class+'" style="padding-left:4px" for="'+id+'">'+settingnames[i].title+'</label><select style="margin:4px" name="'+id+'" id="'+id+'" /></li>')
+                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em"><label class="'+settingnames[i].class+'" style="padding-left:4px" for="'+id+'">'+settingnames[i].title+'</label><select style="margin:4px" name="'+id+'" id="'+id+'" /></li>');
                     var options = settingnames[i].opts;
                     var select = $('#'+id);
                     for (var j = 0; j < options.length; j++) {
@@ -1599,7 +1674,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                     }
                     break;
                 case "label":
-                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em;><label class="'+settingnames[i].class+'">'+settingnames[i].title+'</label></li>')
+                    settingsList.append('<li title="'+settingnames[i].tooltip+'" style="margin-left:'+indent+'em;><label class="'+settingnames[i].class+'">'+settingnames[i].title+'</label></li>');
                     break; 
             }
         }
@@ -1615,7 +1690,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             \
             function change_position(val)\
             {\
-                for (var i = 0; i < '+settings["charcount"]+'; i++)\
+                for (var i = 0; i < '+settings.charcount+'; i++)\
                 {\
                     document.getElementById("charContainer"+i).style.display="none";\
                 }\
@@ -1626,7 +1701,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             <div id="charPanel">\
                 <div style="width:150px;float:left;max-height:400px;overflow:auto;">\
             ';
-        for (var i = 0; i < settings["charcount"]; i++) {
+        for (var i = 0; i < settings.charcount; i++) {
             addText += '\
                     <div><input autocomplete="off" type="radio" name="radio_position" onclick="click_position(this)" id="value_'+i+'" value="'+i+'" /><label for="value_'+i+'">'+settings["nw_charname"+i]+'</label></div>\
                 ';
@@ -1635,16 +1710,16 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 </div>\
                 <div style="width:170px;float:right;">\
             ';
-        for (var i = 0; i < settings["charcount"]; i++) {
+        for (var i = 0; i < settings.charcount; i++) {
             addText += '\
                     <div id="charContainer'+i+'" style="display:none">\
                         <ul style="list-style: none outside none; max-height: 500px; overflow: auto;">\
                 ';
-            var k = 0 + (i*charSettings.length/settings["charcount"]);
+            var k = 0 + (i*charSettings.length/settings.charcount);
             var id = 'settings_' + charSettings[k].name;
             addText += '<li title="'+charSettings[k].tooltip+'"><input style="margin:4px" name="'+id+'" id="'+id+'" type="text" /></li>';
-            for (var j = 1; j < (charSettings.length/settings["charcount"]); j++) {
-                k = j + (i*charSettings.length/settings["charcount"]);
+            for (var j = 1; j < (charSettings.length/settings.charcount); j++) {
+                k = j + (i*charSettings.length/settings.charcount);
                 if (charSettings[k].type == 'void') { continue; }
                 id = 'settings_' + charSettings[k].name;
                 addText += '<li title="'+charSettings[k].tooltip+'"><input maxlength="2" size="1" style="margin:4px" name="'+id+'" id="'+id+'" type="text" /><label class="'+charSettings[k].class+'" for="'+id+'">'+charSettings[k].title+'</label></li>';
@@ -1670,7 +1745,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
         
         // Add code to tasklist buttons
-        for (var i = 0; i < settings["charcount"]; i++) {
+        for (var i = 0; i < settings.charcount; i++) {
             $("#save_tasklist"+i).click(function() {
                 var num = this.id.replace("save_tasklist", "");
                 charSettings["tasklist"+num] = tasklist;
@@ -1695,7 +1770,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         $("body").append('<div id="settingsButton"><img src="'+image_prefs+'" title="Click to show preferences" style="cursor: pointer; display: block;"></div>');
 
         // Add pause button to page
-        $("body").append('<div id="pauseButton"><img src="'+(settings["paused"]?image_play:image_pause)+'" title="Click to '+(settings["paused"]?"resume":"pause")+' task script" style="cursor: pointer; display: block;"></div>');
+        $("body").append('<div id="pauseButton"><img src="'+(settings.paused?image_play:image_pause)+'" title="Click to '+(settings.paused?"resume":"pause")+' task script" style="cursor: pointer; display: block;"></div>');
 
         // Add the javascript
         $("#settingsPanel").hide();
@@ -1710,19 +1785,19 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             $("#settingsPanel").hide();
         });
         $("#pauseButton").click(function() {
-            settings["paused"] = !settings["paused"]
-            setTimeout(function() { GM_setValue("paused", settings["paused"]); }, 0);
-            $("#settings_paused").prop("checked", settings["paused"]);
-            $("#pauseButton img").attr("src",(settings["paused"]?image_play:image_pause));
-            $("#pauseButton img").attr("title","Click to "+(settings["paused"]?"resume":"pause")+" task script");
+            settings.paused = !settings.paused;
+            setTimeout(function() { GM_setValue("paused", settings.paused); }, 0);
+            $("#settings_paused").prop("checked", settings.paused);
+            $("#pauseButton img").attr("src",(settings.paused?image_play:image_pause));
+            $("#pauseButton img").attr("title","Click to "+(settings.paused?"resume":"pause")+" task script");
         });
 
         // Use setTimeout to workaround permission issues when calling GM functions from main window
-        $("#settings_save").click(function() { setTimeout(function() { SaveSettings();}, 0)});
+        $("#settings_save").click(function() { setTimeout( function() { SaveSettings(); }, 0); });
     }
 
     function SaveSettings() {
-        var charcount = settings["charcount"];
+        var charcount = settings.charcount;
 
         // Get each value from the UI
         for (var i = 0; i < settingnames.length; i++) {
@@ -1764,7 +1839,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
         
         // If character numbers have changed reload page
-        if (charcount != settings["charcount"]) {
+        if (charcount != settings.charcount) {
             console.log("Reloading Gateway to update character count");
             unsafeWindow.location.href = "http://gateway.playneverwinter.com";
             return;
@@ -1773,15 +1848,15 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         // Delete all saved settings
         if (settingwipe) {
             var keys = GM_listValues();
-            for (var i = 0, key = null; key = keys[i]; i++) {
-                GM_deleteValue(key);
+            for (var i = 0; i < keys.length; i++) {
+                GM_deleteValue(keys[i]);
             }
         }
         
         // Close the panel
         $("#settingsButton").show();
-        $("#pauseButton img").attr("src",(settings["paused"]?image_play:image_pause));
-        $("#pauseButton img").attr("title","Click to "+(settings["paused"]?"resume":"pause")+" task script");
+        $("#pauseButton img").attr("src",(settings.paused?image_play:image_pause));
+        $("#pauseButton img").attr("title","Click to "+(settings.paused?"resume":"pause")+" task script");
         $("#pauseButton").show();
         $("#settingsPanel").hide();
     }
