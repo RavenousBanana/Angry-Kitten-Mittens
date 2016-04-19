@@ -614,7 +614,17 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
                     unsafeWindow.client.professionFetchTaskList('craft_'+profession.name);
                     unsafeWindow.client.dataModel.fetchVendor('Nw_Gateway_Professions_Merchant');
-                    window.setTimeout(function() { createNextTask(createTaskList(profession.name), 0); }, delay.SHORT);
+                    window.setTimeout(function() {
+                        var taskList = createTaskList(profession.name);
+                        if (taskList !== null) {
+                            console.log("Task list generated:", taskList);
+                            createNextTask(taskList, 0);
+                        } else {
+                            console.log("Failed to generate task list.");
+                            dfdNextRun.resolve(delay.SHORT);
+                        }
+                        return true;
+                    }, delay.SHORT);
                     return true;
                 }
             }
@@ -642,12 +652,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         if (!unsafeWindow.client.dataModel.model.craftinglist || unsafeWindow.client.dataModel.model.craftinglist === null || !unsafeWindow.client.dataModel.model.craftinglist['craft_'+professionName] ||
             unsafeWindow.client.dataModel.model.craftinglist['craft_'+professionName] === null) {
             console.log("Tasks are not yet loaded for", professionName);
-            window.setTimeout(function() { createTaskList(professionName); }, delay.SHORT);
+            //window.setTimeout(function() { return createTaskList(professionName); }, delay.SHORT);
             return null;
         } else {
             if (!unsafeWindow.client.dataModel.model.vendor || unsafeWindow.client.dataModel.model.vendor === null || !unsafeWindow.client.dataModel.model.vendor.items || unsafeWindow.client.dataModel.model.vendor.items === null) {
-                console.log("The vendor had not loaded yet");
-                window.setTimeout(function() { createTaskList(professionName); }, delay.SHORT);
+                console.log("The vendor has not loaded yet");
+                //window.setTimeout(function() { return createTaskList(professionName); }, delay.SHORT);
                 return null;
             } else {
                 var profession = unsafeWindow.client.dataModel.model.craftinglist['craft_'+professionName];
@@ -681,6 +691,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 }
                 var tasks = createSortedEntryList(profession.entries.filter(filterTasksByLevel), sorts, professionName);
                 tasks.craftName = professionName;
+                //console.log("createTaskList returning", tasks);
                 return tasks;
             }
         }
@@ -782,6 +793,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                     console.log("Cannot perform", task.def.displayname, "as the 'No Bag Space' option is checked (profession:"+professionName+")");
                     continue;
                 }
+                console.log(getBagSpace()+" inventory slot/s available. "+requiredBagSpace+" inventory slots required for "+task.def.name);
                 if (getBagSpace() < requiredBagSpace) {
                     console.log("Cannot perform", task.def.displayname, "due to insufficient bag space");
                     continue;
@@ -830,7 +842,11 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     }
 
     function getBagSpace() {
-        return unsafeWindow.client.dataModel.model.ent.main.inventory.notassignedslots.length;
+        var emptySlots = 0;
+        unsafeWindow.client.dataModel.model.ent.main.inventory.playerbags.forEach(function(playerbag) {
+            emptySlots += playerbag.slots.filter(function(slot) { return slot === null; }).length;
+        });
+        return emptySlots;
     }
 
     function sufficientCopper(task) {
@@ -987,8 +1003,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * @param {int} i The current task number being attempted
      */
     function createNextTask(tasks, i) {
+
+        console.log("Selecting next task (i: "+i+").");
+
         if (tasks === null || i+1 > tasks.length) {
             console.log("Unable to select a task, the task list is empty");
+            dfdNextRun.resolve(delay.SHORT);
             return false;
         }
         if (!unsafeWindow.client.dataModel.model.craftinglist || unsafeWindow.client.dataModel.model.craftinglist === null || !unsafeWindow.client.dataModel.model.craftinglist['craft_' + tasks.craftName] || unsafeWindow.client.dataModel.model.craftinglist['craft_' + tasks.craftName] === null) {
@@ -997,9 +1017,8 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             return false;
         }
         var task = getNextTask(tasks[i]);
-        if (!gatherResources(task)) {
-            createNextTask(tasks, i+1);
-        }
+        gatherResources(task);
+        
         // TODO: Craft name should be on each task, that way we can create a craftlist containing mixed craft tasks.
         task = '/professions-tasks/' + tasks.craftName + '/' + task.def.name;
         unsafeWindow.location.hash = unsafeWindow.location.hash.replace(/\)\/.+/,')' + task);
@@ -1040,23 +1059,26 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     function gatherResources(task) {
         if (!task.failedrequirementsreasons.length) {
-            return true;
-        }
-        var consumables = task.consumables.filter(function(consumable) { return consumable.required && !consumable.fillsrequirements; });
-        for (var i = 0; i < consumables.length; i++) {
-            var consumable = consumables[i];
-            buyConsumable(consumable);
-        }
-        var assets = task.required.filter(function(asset){ return asset.required && !asset.fillsrequirements; });
-        for (var j = 0; j < assets.length; j++) {
-            var asset = assets[j];
-            if (!asset.fillsrequirements) {
-                buyAsset(asset);
+            console.log("Resource requirements met for "+task.def.name);
+        } else {
+            console.log("Resource requirements not met for "+task.def.name);
+            var consumables = task.consumables.filter(function(consumable) { return consumable.required && !consumable.fillsrequirements; });
+            for (var i = 0; i < consumables.length; i++) {
+                var consumable = consumables[i];
+                buyConsumable(consumable);
+            }
+            var assets = task.required.filter(function(asset){ return asset.required && !asset.fillsrequirements; });
+            for (var j = 0; j < assets.length; j++) {
+                var asset = assets[j];
+                if (!asset.fillsrequirements) {
+                    buyAsset(asset);
+                }
             }
         }
     }
 
     function buyConsumable(consumable) {
+        console.log("Buying consumable: "+consumable.hdef);
         unsafeWindow.client.sendCommand("GatewayVendor_PurchaseVendorItem", { vendor: 'Nw_Gateway_Professions_Merchant', store: 'Store_Crafting_Resources', idx: getStoreIndex(consumable), count: consumable.required - consumable.count });
         WaitForState("button.closeNotification").done(function() {
             $("button.closeNotification").click();
@@ -1074,6 +1096,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     }
 
     function buyAsset(asset) {
+        console.log("Buying asset: "+asset.hdef);
         unsafeWindow.client.sendCommand("GatewayVendor_PurchaseVendorItem", { vendor: 'Nw_Gateway_Professions_Merchant', store: 'Store_Crafting_Assets', idx: getStoreIndex(asset), count: 1 });
         WaitForState("button.closeNotification").done(function() {
             $("button.closeNotification").click();
@@ -1243,6 +1266,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     }
     
     function loginProcess() {
+
+        console.log("Login process started.");
+
         // Get logged on account details
         var accountName;
         try {
@@ -1250,6 +1276,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
         catch (e) {
             // TODO: Use callback function
+            console.log("ERROR: Failed to get the account name.");
             window.setTimeout(function() {loginProcess();}, delay.SHORT);
             return;
         }
@@ -1282,17 +1309,26 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             }
 
             // Try to start tasks
-            if (processCharacter()) { return; }
+            if (processCharacter()) {
+                console.log("Not finished processing "+charName+".");
+                return;
+            } else {
+                console.log("Finished processing "+charName+".");
+            }
 
-            // Switch characters as necessary
-            delay.CHAR;
-            switchChar();
+            // Switch to the next character.
+            window.setTimeout(function() {
+                switchChar();
+            }, delay.CHAR);
+            
+        } else {
+            console.log("ERROR: No account name available.");
         }
     }
 
     function loadCharacter(charname) {
         // Load character and restart next load loop
-        console.log("Loading gateway script for", charname);
+        console.log("Loading "+charname);
         unsafeWindow.client.dataModel.loadEntityByName(charname);
         dfdNextRun.resolve();
     }
