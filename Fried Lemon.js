@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name           Neverwinter Gateway Professions Bot
+// @name           Neverwinter Gateway Professions Bot v2
 // @description    Automatically selects profession tasks for empty slots.
 // @namespace      http://userscripts.org/scripts/show/171738
 // @include        https://gateway.playneverwinter.com
@@ -12,7 +12,7 @@
 // @include        http://gatewaysitedown.playneverwinter.com/* 
 // @originalAuthor Mustex
 // @modifiedBy     Bunta, RavenousBanana
-// @version        1.1.3
+// @version        2.0.0
 // @license        http://creativecommons.org/licenses/by-nc-sa/3.0/us/
 // @grant          GM_getValue
 // @grant          GM_setValue
@@ -200,10 +200,12 @@
     - Added tasks up to rank 25 for leadership.
 1.1.3
     - Added Jewelcrafting up to rank 25.
+2.0.0
+    - Switched to list free version.
 */
-var version = '1.1.3';
+var version = '2.0.0';
 
-console.log("Neverwinter Gateway Bot v", version + " running");
+console.log("Neverwinter Gateway Bot v", version+" running");
 
 // Make sure it's running on the main page, no frames
 if (window.self !== window.top) {
@@ -226,7 +228,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     var state_idle         = 0;   // If the page is idle for longer than 60 seconds, reload page (maybe a javascript error)
     var state_idle_time    = 120; // default of 120 seconds
-    var reload_hours       = [2,5,8,11,14,17,20,23]; // logout and reload every three hours - 2:29 - 5:29 - 8:29 - 11:29 - 14:29 - 17:29 - 20:29 - 23:29
+    var reload_hours       = [2, 5, 8, 11, 14, 17, 20, 23]; // logout and reload every three hours - 2:29 - 5:29 - 8:29 - 11:29 - 14:29 - 17:29 - 20:29 - 23:29
     var last_location      = "";  // variable to track reference to page URL
     var reload_timer       = setInterval(function() {
         if (!s_paused) {
@@ -259,34 +261,35 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 }
                 else {
                     state_loading++;
-                    console.log("Page Loading ...", state_loading + "s");
+                    console.log("Page Loading ...", state_loading+"s");
                 }
             }
             // TODO: Add check for Gateway disconnected
             //<div class="modal-content" id="modal_content"><h3>Disconnected from Gateway</h3><p>You have been disconnected.</p><button type="button" class="modal-button" onclick="window.location.reload(true);">Close</button>
             
 
-            // Can't use idle check with dataModel methods
-            //else if (location.href == last_location) {
-            //    state_loading = 0;
-            //    if (state_idle >= state_idle_time) {
-            //        console.log("Page Idle too long");
-            //        state_idle = 0;
-            //        unsafeWindow.location.href = "http://gateway.playneverwinter.com";
-            //    }
-            //    else {
-            //        state_idle++;
-            //        // comment out to avoid console spam
-            //        //console.log("Page Idle ...", state_idle + "s");
-            //    }
-            //}
+            /* Can't use idle check with dataModel methods
+            else if (location.href == last_location) {
+                state_loading = 0;
+                if (state_idle >= state_idle_time) {
+                    console.log("Page Idle too long");
+                    state_idle = 0;
+                    unsafeWindow.location.href = "http://gateway.playneverwinter.com";
+                }
+                else {
+                    state_idle++;
+                    // comment out to avoid console spam
+                    console.log("Page Idle ...", state_idle+"s");
+                }
+            }
+            */
             else {
                 last_location = location.href;
                 state_loading = 0;
                 state_idle = 0;
             }
         }
-    },1000);
+    }, 1000);
 })();
 
 (function() {
@@ -464,58 +467,77 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         DEFAULT : 10000, // default delay
         TIMEOUT : 60000, // delay for cycle processing timeout
     };
+
+    // Delete all saved settings
+    if (settingwipe) {
+        var keys = GM_listValues();
+        for (var i = 0; i < keys.length; i++) {
+            GM_deleteValue(keys[i]);
+        }
+    }
     
     // Load Settings
     var settingnames = [
-        {name: 'paused',                   title: 'Pause Script',                   def: false, type:'checkbox', tooltip:'Disable All Automation'},
-        {name: 'debug',                    title: 'Enable Debug',                   def: false, type:'checkbox', tooltip:'Enable all debug output to console', onsave: function(newValue) {console=newValue?unsafeWindow.console||fouxConsole:fouxConsole;}},
-        {name: 'optionals',                title: 'Fill Optional Assets',           def: true,  type:'checkbox', tooltip:'Enable to include selecting the optional assets of tasks'},
-        {name: 'autopurchase',             title: 'Auto Purchase Resources',        def: true,  type:'checkbox', tooltip:'Automatically purchase required resources from gateway shop (100 at a time)'},
-        {name: 'trainassets',              title: 'Train Assets',                   def: true,  type:'checkbox', tooltip:'Enable training/upgrading of asset worker resources'},
-        {name: 'refinead',                 title: 'Refine AD',                      def: true,  type:'checkbox', tooltip:'Enable refining of AD on character switch'},
-        {name: 'autoreload',               title: 'Auto Reload',                    def: false, type:'checkbox', tooltip:'Enabling this will reload the gateway periodically. (Ensure Auto Login is enabled)'},
-        {name: 'delay',                    title: 'Character switch delay (ms)',    def: '10',  type:'text',     tooltip: 'This is the amount of time between character switches.'},
-        {name: 'autologin',                title: 'Attempt to login automatically', def: false, type:'checkbox', tooltip:'Automatically attempt to login to the neverwinter gateway site'},
-        {name: 'nw_username',              title: '  Neverwinter Username',         def: '',    type:'text',     tooltip:''},
-        {name: 'nw_password',              title: '  Neverwinter Password',         def: '',    type:'password', tooltip:''},
-        {name: 'charcount',                title: '  Number of Characters',         def: '2',   type:'text',     tooltip:'Enter number of characters to use (reload page to update settings form)'},
+        {name: 'paused',        title: 'Pause Script',                   def: false,   type: 'checkbox', tooltip: 'Disable All Automation'},
+        {name: 'debug',         title: 'Enable Debug',                   def: false,   type: 'checkbox', tooltip: 'Enable all debug output to console', onsave: function(newValue) { console = newValue ? unsafeWindow.console || fouxConsole:fouxConsole; }},
+        {name: 'optionals',     title: 'Fill Optional Assets',           def: true,    type: 'checkbox', tooltip: 'Enable to include selecting the optional assets of tasks'},
+        {name: 'trainassets',   title: 'Train Assets',                   def: true,    type: 'checkbox', tooltip: 'Enable training/upgrading of asset worker resources'},
+        {name: 'refinead',      title: 'Refine AD',                      def: true,    type: 'checkbox', tooltip: 'Enable refining of AD on character switch'},
+        {name: 'autoreload',    title: 'Auto Reload',                    def: false,   type: 'checkbox', tooltip: 'Enabling this will reload the gateway periodically. (Ensure Auto Login is enabled)'},
+        {name: 'no_bag_space',  title: 'Use No Bag Space',               def: false,   type: 'checkbox', tooltip: 'Enabling this will prevent tasks that consume bag space from being run (Alchemy excluded)'},
+        {name: 'delay',         title: 'Character switch delay (ms)',    def: '10000', type: 'text',     tooltip:  'This is the amount of time between character switches.'},
+        {name: 'autologin',     title: 'Attempt to login automatically', def: false,   type: 'checkbox', tooltip: 'Automatically attempt to login to the neverwinter gateway site'},
+        {name: 'nw_username',   title: '  Neverwinter Username',         def: '',      type: 'text',     tooltip: ''},
+        {name: 'nw_password',   title: '  Neverwinter Password',         def: '',      type: 'password', tooltip: ''},
+        {name: 'charcount',     title: '  Number of Characters',         def: '0',     type: 'text',     tooltip: 'Enter number of characters to use (reload page to update settings form)'},
     ];
 
-    var professionNames = ["Leadership", "Armorsmithing_Med", "Armorsmithing_Heavy", "Leatherworking", "Tailoring", "Artificing", "Weaponsmithing", "Alchemy", "Jewelcrafting", "BlackIce", "WinterEvent"];
-    var prettyProfessionNames = ["Leadership", "Mailsmithing", "Platesmithing", "Leatherworking", "Tailoring", "Artificing", "Weaponsmithing", "Alchemy", "Jewelcrafting", "Black Ice Crafting", "Winter Event"];
+    var professions = [
+        { name: "Leadership",          displayName: "Leadership"     },
+        { name: "Armorsmithing_Med",   displayName: "Mailsmithing"   },
+        { name: "Armorsmithing_Heavy", displayName: "Platesmithing"  },
+        { name: "Leatherworking",      displayName: "Leatherworking" },
+        { name: "Tailoring",           displayName: "Tailoring"      },
+        { name: "Artificing",          displayName: "Artificing"     },
+        { name: "Weaponsmithing",      displayName: "Weaponsmithing" },
+        { name: "Alchemy",             displayName: "Alchemy"        },
+        { name: "Jewelcrafting",       displayName: "Jewelcrafting"  },
+    ];
     
     // Load local settings cache (unsecured)
     var settings = {};
-    for (var i = 0; i < settingnames.length; i++) {
-        // Ignore label types
-        if (settingnames[i].type === 'label') {
+    for (var j = 0; j < settingnames.length; j++) {
+        var settingname = settingnames[j];
+        if (settingname.type === 'label') {
             continue;
         } 
-        settings[settingnames[i].name] = GM_getValue(settingnames[i].name, settingnames[i].def);
-        // call the onsave for the setting if it exists
-        if (typeof(settingnames[i].onsave) === "function") {
-            console.log("Calling 'onsave' for", settingnames[i].name);
-            settingnames[i].onsave(settings[settingnames[i].name], settings[settingnames[i].name]);
+        settings[settingname.name] = GM_getValue(settingname.name, settingname.def);
+        if (typeof(settingname.onsave) === "function") {
+            //console.log("Calling 'onsave' for", settingname.name);
+            settingname.onsave(settings[settingname.name], settings[settingname.name]);
         }
     }
     
     if (settings.charcount<1) { settings.charcount = 1; }
     if (settings.charcount>99) { settings.charcount = 99; }
 
+    // Create settings.
     var charSettings = [];
-    for (var i = 0; i < settings.charcount; i++) {
-        charSettings.push({name: 'nw_charname'+i, title: 'Character', def: 'Character '+(i+1), type:'text', tooltip:'Characters Name'});
-        for (var j = 0; j < prettyProfessionNames.length; j++) {
-            var professionName = prettyProfessionNames[j];
-            charSettings.push({ name: professionNames[j]+i,          title: professionName, def: '0',   type: 'text',     tooltip: 'Number of slots to assign to '+professionName });
-            charSettings.push({ name: professionNames[j]+i+"RP",     title: "RP",           def: false, type: 'checkbox', tooltip: 'Prioritize RP' });
-            charSettings.push({ name: professionNames[j]+i+"XP",     title: "XP",           def: false, type: 'checkbox', tooltip: 'Prioritize XP' });
-            charSettings.push({ name: professionNames[j]+i+"Copper", title: "Copper",       def: false, type: 'checkbox', tooltip: 'Prioritize Copper' });
+    for (var k = 0; k < settings.charcount; k++) {
+        charSettings.push({name: 'nw_charname'+k, title: 'Character', def: 'Character '+(k+1), type:'text', tooltip:'Characters Name'});
+        for (var l = 0; l < professions.length; l++) {
+            var profession = professions[l];
+            charSettings.push({ name: profession.name+k,          title: profession.displayName, def: '0',   type: 'text',     tooltip: 'Number of slots to assign to '+profession.displayName });
+            charSettings.push({ name: profession.name+k+"RP",     title: "RP",                   def: false, type: 'checkbox', tooltip: 'Prioritize RP' });
+            charSettings.push({ name: profession.name+k+"XP",     title: "XP",                   def: false, type: 'checkbox', tooltip: 'Prioritize XP' });
+            charSettings.push({ name: profession.name+k+"Copper", title: "Copper",               def: false, type: 'checkbox', tooltip: 'Prioritize Copper' });
         }
     }
-
-    for (var i = 0; i < charSettings.length; i++) {
-        settings[charSettings[i].name] = GM_getValue(charSettings[i].name, charSettings[i].def);
+    
+    // Load settings.
+    for (var m = 0; m < charSettings.length; m++) {
+        var currentCharSettings = charSettings[m];
+        settings[currentCharSettings.name] = GM_getValue(currentCharSettings.name, currentCharSettings.def);
     }
     
     // Page Settings
@@ -530,10 +552,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * Uses the page settings to determine which page is currently displayed
      */
     function GetCurrentPage() {
-        for (var i = 0; i < PAGES.length; i++) {
-            var page = PAGES[i];
-            if ($(page.path).filter(":visible").length) {
-                return page;
+        for (var page in PAGES) {
+            if ($(PAGES[page].path).filter(":visible").length) {
+                return PAGES[page];
             }
         }
     }
@@ -543,13 +564,13 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * No client.dataModel exists at this stage
      */
     function page_LOGIN() {
-        //if (!$("form > p.error:visible").length && settings["autologin"]) {
+        //if (!$("form > p.error:visible").length && settings.autologin) {
             // No previous log in error - attempt to log in
-            console.log("Setting username");
+            //console.log("Setting username");
             $("input#user").val(settings.nw_username);
-            console.log("Setting password");
+            //console.log("Setting password");
             $("input#pass").val(settings.nw_password);
-            console.log("Clicking Login Button");
+            //console.log("Clicking Login Button");
             $("div#login > input").click();
         //}
         dfdNextRun.resolve(delay.LONG);
@@ -569,48 +590,57 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * If no action is started function returns false to switch characters
      */
     function processCharacter() {
+
         // Switch to professions page to show task progression
         unsafeWindow.location.hash="#char("+encodeURI(unsafeWindow.client.getCurrentCharAtName())+")/professions";
         
         // Collect rewards for completed tasks and restart
         if (unsafeWindow.client.dataModel.model.ent.main.itemassignments.complete) {
-            unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.forEach(function(entry) {
-                if (entry.hascompletedetails) { unsafeWindow.client.professionTaskCollectRewards(entry.uassignmentid); }
-            });
-            dfdNextRun.resolve();
-            // Return false unless collecting from the completed tasks failed (possibly full inventory on the character), in which case we return true continue.
-            // TODO: This does not work as expected, the script still sticks if the inventory is full.
-            if (!unsafeWindow.client.dataModel.model.ent.main.itemassignments.complete) {
-                return false;
-            } else {
-                console.log("Character inventory may be full");
-                return true;
-            }
+            return collectRewards();
         }
         
         // Check for available slots and start new task
         if (unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.filter(function(entry) { return (!entry.islockedslot && !entry.uassignmentid); }).length) {
 
-            // Go through the professions to assign tasks until specified slots filled 
-            for (var i = 0; i < professionNames.length; i++) {
-                var currentTasks = unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.filter(function(profession) { return profession.category == professionNames[i]; });
-                if (currentTasks.length < settings[professionNames[i]]) {
-                    unsafeWindow.client.professionFetchTaskList('craft_' + professionNames[i]);
+            // Go through the professions to assign tasks until specified slots filled
+            for (var i = 0; i < professions.length; i++) {
+                var profession = professions[i];
+
+                // Filter the current tasks by profession
+                var currentTasks = unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.filter(function(task) { return task.category === profession.Name; });
+
+                // Check if we have filled our quota for the profession
+                if (currentTasks.length < settings[profession.name]) {
+
+                    unsafeWindow.client.professionFetchTaskList('craft_'+profession.name);
                     unsafeWindow.client.dataModel.fetchVendor('Nw_Gateway_Professions_Merchant');
-                    window.setTimeout(function() { createNextTask(createTaskList(professionNames[i]), 0); }, delay.SHORT);
+                    window.setTimeout(function() { createNextTask(createTaskList(profession.name), 0); }, delay.SHORT);
                     return true;
                 }
             }
             console.log("All task counts assigned");
+        }
+        else {
+            //console.log("No available task slots");
         }
         
         // TODO: Add code to get next task finish time
         return false;
     }
 
+    function collectRewards() {
+        unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.forEach(function(entry) {
+            if (entry.hascompletedetails) {
+                unsafeWindow.client.professionTaskCollectRewards(entry.uassignmentid);
+            }
+        });
+        dfdNextRun.resolve();
+        return unsafeWindow.client.dataModel.model.ent.main.itemassignments.complete;
+    }
+
     function createTaskList(professionName) {
-        if (!unsafeWindow.client.dataModel.model.craftinglist || unsafeWindow.client.dataModel.model.craftinglist === null || !unsafeWindow.client.dataModel.model.craftinglist['craft_' + professionName] ||
-            unsafeWindow.client.dataModel.model.craftinglist['craft_' + professionName] === null) {
+        if (!unsafeWindow.client.dataModel.model.craftinglist || unsafeWindow.client.dataModel.model.craftinglist === null || !unsafeWindow.client.dataModel.model.craftinglist['craft_'+professionName] ||
+            unsafeWindow.client.dataModel.model.craftinglist['craft_'+professionName] === null) {
             console.log("Tasks are not yet loaded for", professionName);
             window.setTimeout(function() { createTaskList(professionName); }, delay.SHORT);
             return null;
@@ -620,85 +650,89 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 window.setTimeout(function() { createTaskList(professionName); }, delay.SHORT);
                 return null;
             } else {
-                var profession = unsafeWindow.client.dataModel.model.craftinglist['craft_' + professionName];
-                console.log("Creating task list for", professionName, profession);
+                var profession = unsafeWindow.client.dataModel.model.craftinglist['craft_'+professionName];
+                console.log("Creating task list for", professionName);
                 var sorts = [sortByProfessionXP];
                 console.log("Prioritizing Profession XP");
                 var prioritySettings = charSettings.filter(function(setting) { return setting.name === professionName+charcurrent+'RP' || setting.name === professionName+charcurrent+'XP' || setting.name === professionName+charcurrent+'Copper'; });
                 for (var i = 0; i < prioritySettings.length; i++) {
                     var setting = prioritySettings[i];
                     if (setting.name === professionName+charcurrent+'Copper' && settings[setting.name] === true) {
-                        sorts.push(sortByXP);
+                        sorts.push(sortByCopper);
                         console.log("Prioritizing Copper");
                         break;
                     }
                 }
-                for (var i = 0; i < prioritySettings.length; i++) {
-                    var setting = prioritySettings[i];
-                    if (setting.name === professionName+charcurrent+'XP' && settings[setting.name] === true) {
+                for (var j = 0; j < prioritySettings.length; j++) {
+                    var setting2 = prioritySettings[j];
+                    if (setting2.name === professionName+charcurrent+'XP' && settings[setting2.name] === true) {
                         sorts.push(sortByXP);
                         console.log("Prioritizing XP");
                         break;
                     }
                 }
-                for (var i = 0; i < prioritySettings.length; i++) {
-                    var setting = prioritySettings[i];
-                    if (setting.name === professionName+charcurrent+'RP' && settings[setting.name] === true) {
-                        sorts.push(sortByXP);
+                for (var k = 0; k < prioritySettings.length; k++) {
+                    var setting3 = prioritySettings[k];
+                    if (setting3.name === professionName+charcurrent+'RP' && settings[setting3.name] === true) {
+                        sorts.push(sortByRP);
                         console.log("Prioritizing RP");
                         break;
                     }
                 }
-                var tasks = createSortedEntryList(profession.entries.filter(filterTasksByLevel), sorts);
+                var tasks = createSortedEntryList(profession.entries.filter(filterTasksByLevel), sorts, professionName);
                 tasks.craftName = professionName;
                 return tasks;
             }
         }
     }
 
+    function sortByProfessionXP(a, b) {
+        return sort(a, b, filterByProfessionXP);
+    }
+
+    function sortByXP(a, b) {
+        return sort(a, b, filterByXP);
+    }
+
+    function sortByCopper(a, b) {
+        return sort(a, b, filterByCopper);
+    }
+
+    function sortByRP(a, b) {
+        return sort(a, b, filterByRP);
+    }
+
     function filterTasksByLevel(task) {
         return !task.failslevelrequirements;
     }
 
-    function createSortedEntryList(tasks, sortByFuncs) {
-        var sortedTasks = [];
-        for (var i = 0; i < tasks.length; i++) {
-            var task = tasks[i];
-            if (findChildren(task, tasks)) {
-
-                // Check if the character has enough Copper to complete the task.
-                if (!sufficientCopper(task)) {
-                    console.log("Cannot perform", task.def.displayname, "as there is insufficient Copper");
-                    continue;
-                } else {
-                    console.log("Sufficient Copper available for", task.def.displayname);
-                }
-
-                // Check if the task requires Astral Diamonds.
-                if (requiresAD(task)) {
-                    console.log("Cannot perform", task.def.displayname, "as it requires AD");
-                    continue;
-                } else {
-                    console.log(task.def.displayname, "does not require AD");
-                }
-                sortedTasks.push(task);
-            }
+    function sort(taskA, taskB, filter) {
+        //console.log("DEBUG:", taskA.def.name, taskB.def.name);
+        if (/Alchemy_Tier\d+_Experiment_Rank\d+/.exec(taskA.def.name) !== null) {
+            return -1;
         }
-        for (var i = 0; i < sortByFuncs.length; i++) {
-            sortedTasks.sort(sortByFuncs[i]);
+        if (/Alchemy_Tier\d+_Experiment_Rank\d+/.exec(taskA.def.name) !== null) {
+            return 1;
         }
-        console.log("DEBUG sortedTasks:", sortedTasks.map(function(task) { return task.def.displayname; }).join(", "));
-        return sortedTasks;
-    }
-
-    function getRewardAmount(task, hdef) {
-        var amount = 0;
-        var rewards = getRewards(task).filter(function(reward){ return reward.hdef === hdef; });
-        for (var i = 0; i < rewards.length; i++){
-            var reward = rewards[i];
-            amount += reward.count;
+        if (/Alchemy_Tier\d+_Experimentation_Rank\d+/.exec(taskA.def.name) !== null) {
+            //console.log("taskA is experimentation, prioritizing");
+            return -1;
         }
-        return amount;
+        if (/Alchemy_Tier\d+_Experimentation_Rank\d+/.exec(taskB.def.name) !== null) {
+            //console.log("taskB is experimentation, prioritizing");
+            return 1;
+        }
+        var taskARewards = getRewards(taskA).filter(filter);
+        var taskARewardTotal = 0;
+        for (var i = 0; i < taskARewards.length; i++) {
+            taskARewardTotal += taskARewards[i].count;
+        }
+        var taskBRewards = getRewards(taskB).filter(filter);
+        var taskBRewardTotal = 0;
+        for (var j = 0; j < taskBRewards.length; j++) {
+            taskBRewardTotal += taskBRewards[j].count;
+        }
+        return taskBRewardTotal/calculateDuration(taskB) - taskARewardTotal/calculateDuration(taskA);
     }
 
     function getRewards(task) {
@@ -710,8 +744,114 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         return rewards;
     }
 
+    function calculateDuration(task) {
+        var duration = task.def.duration;
+        for (var i = 0; i < task.children.length; i++) {
+            var child = task.children[i];
+            duration += calculateDuration(child);
+        }
+        return duration;
+    }
+
+    function filterByProfessionXP(reward) {
+        return /@ItemDef\[Xp_Crafting_\w+\]/.exec(reward.hdef) !== null;
+    }
+
+    function filterByXP(reward) {
+        return reward.hdef == "@ItemDef[XP]";
+    }
+
+    function filterByCopper(reward) {
+         return reward.hdef == "@ItemDef[Resources]";
+    }
+
+    function filterByRP(reward) {
+        return /@ItemDef\[\w+_Rp\]/.exec(reward.hdef) !== null;
+    }
+
+    function createSortedEntryList(tasks, sortByFuncs, professionName) {
+        var sortedTasks = [];
+        for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+
+            if (findChildren(task, tasks)) {
+
+                // Check if the character has enough bag space to complete the task.
+                var requiredBagSpace = getRequiredBagSpace(task);
+                if (professionName !== "Alchemy" && (settings.no_bag_space && requiredBagSpace > 0)) {
+                    console.log("Cannot perform", task.def.displayname, "as the 'No Bag Space' option is checked (profession:"+professionName+")");
+                    continue;
+                }
+                if (getBagSpace() < requiredBagSpace) {
+                    console.log("Cannot perform", task.def.displayname, "due to insufficient bag space");
+                    continue;
+                }
+
+                // Check if the character has enough Copper to complete the task.
+                if (!sufficientCopper(task)) {
+                    console.log("Cannot perform", task.def.displayname, "as there is insufficient Copper");
+                    continue;
+                } else {
+                    //console.log("Sufficient Copper available for", task.def.displayname);
+                }
+
+                // Check if the task requires Astral Diamonds.
+                if (requiresAD(task)) {
+                    console.log("Cannot perform", task.def.displayname, "as it requires AD");
+                    continue;
+                } else {
+                    //console.log(task.def.displayname, "does not require AD");
+                }
+                sortedTasks.push(task);
+            }
+        }
+        for (var j = 0; j < sortByFuncs.length; j++) {
+            sortedTasks.sort(sortByFuncs[j]);
+        }
+        console.log("DEBUG:", sortedTasks.map(function(task) { return task.def.displayname; }).join(", "));
+        return sortedTasks;
+    }
+
+    function getRequiredBagSpace(task) {
+        var requiredBagSpace = 0;
+        for (var key in task.rewards) {
+            if (requiresBagSpace(task.rewards[key])) { // Ignoring items stacking for now as I cannot tell what will and won't stack
+                requiredBagSpace += 1;
+            }
+        }
+        task.children.forEach(function(child) { requiredBagSpace += getRequiredBagSpace(child); } );
+        //console.log(task.def.name, "requires at most", requiredBagSpace, "inventory slots");
+        return requiredBagSpace;
+    }
+
+    function requiresBagSpace(reward) {
+        //console.log("DEBUG:", reward, reward.hdef, !~reward.hdef.indexOf('Crafting'));
+        return !~reward.hdef.indexOf('Crafting');
+    }
+
+    function getBagSpace() {
+        return unsafeWindow.client.dataModel.model.ent.main.inventory.notassignedslots.length;
+    }
+
     function sufficientCopper(task) {
         return getAvailableCopper() >= getCopperCost(task, "@ItemDef[Resources]");
+    }
+
+    function getAvailableCopper() {
+        return unsafeWindow.client.dataModel.model.vendor.items[0].costinfo[0].availablecount;
+    }
+
+    function getCopperCost(task) {
+        var copperCost = 0;
+        for (var i = 0; i < task.children.length; i++) {
+            var child = task.children[i];
+            copperCost += getCopperCost(child);
+        }
+        if (task.copperCost) {
+            copperCost += task.copperCost;
+        }
+        //console.log(task.def.displayname, "has a total copper cost of", copperCost);
+        return copperCost;
     }
 
     function requiresAD(task) {
@@ -738,49 +878,53 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     }
 
     function findChildren(currentTask, tasks) {
-        console.log("Attempting to build task tree for", currentTask.def.displayname);
+        //console.log("Attempting to build task tree for", currentTask.def.displayname);
         currentTask.children = [];
         currentTask.copperCost = 0;
         var consumables = currentTask.consumables.filter(function(consumable) { return consumable.required && !consumable.fillsrequirements; });
         for (var i = 0; i < consumables.length; i++) {
             var consumable = consumables[i];
-            console.log(currentTask.def.displayname, "requires", consumable.hdef);
+            //console.log(currentTask.def.displayname, "requires", consumable.hdef);
             if (!canBuyConsumable(consumable)) {
                 var reducedTasks = removeCurrentTask(currentTask, tasks);
                 var reqTask = findTaskForConsumable(consumable, reducedTasks);
                 if (reqTask && findChildren(reqTask, reducedTasks)) {
-                    console.log(reqTask.def.displayname, "will supply", consumable.hdef, "for", currentTask.def.displayname);
+                    //console.log(reqTask.def.displayname, "will supply", consumable.hdef, "for", currentTask.def.displayname);
                     currentTask.children.push(reqTask);
                 } else {
                     console.log(consumable.hdef + " cannot be acquired"+ ", " + currentTask.def.displayname + " cannot be completed");
                     return false;
                 }
             } else {
-                var costinfo = getCopperCostinfo(consumable);
-                currentTask.copperCost += costinfo.count * consumable.required;
-                console.log(consumable.hdef, "can be acquired from the vendor for", currentTask.copperCost, "copper");
+                currentTask.copperCost += getCopperCostinfo(consumable).count * consumable.required;
+                //console.log(consumable.hdef, "can be acquired from the vendor for", currentTask.copperCost, "copper");
             }
         }
         var assets = currentTask.required.filter(function(asset){ return !asset.fillsrequirements; });
-        for (var i = 0; i < assets.length; i++) {
-            var asset = assets[i];
-            console.log(currentTask.def.displayname, "requires", asset.icon);
+        for (var j = 0; j < assets.length; j++) {
+            var asset = assets[j];
+            //console.log(currentTask.def.displayname, "requires", asset.icon);
             if (!canBuyAsset(asset)) {
                 var task = findTaskForAsset(asset, tasks);
                 if (task && findChildren(task, tasks)) {
-                    console.log(asset.icon, "can be aquired from the", currentTask.def.displayname, "task");
+                    //console.log(asset.icon, "can be aquired from the", currentTask.def.displayname, "task");
                     currentTask.children.push(task);
                 } else {
-                    console.log(asset.icon + " cannot be acquired"+ ", " + task.def.displayname + " cannot be completed");
+                    console.log(asset.icon + " cannot be acquired"+ ", " + currentTask.def.displayname + " cannot be completed");
                     return false;
                 }
             } else {
-                var costinfo = getCopperCostinfoForAsset(asset);
-                currentTask.copperCost += costinfo.count * asset.required;
-                console.log(asset.icon, "can be acquired from the vendor for", asset.copperCost, "copper");
+                currentTask.copperCost += getCopperCostinfoForAsset(asset).count * asset.required;
+                //console.log(asset.icon, "can be acquired from the vendor for", asset.copperCost, "copper");
             }
         }
         return true;
+    }
+
+    function canBuyConsumable(consumable) {
+        return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){
+            return item.hdef == consumable.hdef;
+        }).length > 0;
     }
 
     function removeCurrentTask(currentTask, tasks) {
@@ -794,12 +938,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         return newTasks;
     }
 
-    function canBuyConsumable(consumable) {
-        return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){
-            return item.hdef == consumable.hdef;
-        }).length > 0;
-    }
-
     function findTaskForConsumable(reqConsumable, craftingList) {
         for (var i = 0; i < craftingList.length; i++) {
             var craftingItem = craftingList[i];
@@ -809,8 +947,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 }
             }
         }
-        console.log("No task found that can provide", reqConsumable.hdef);
+        //console.log("No task found that can provide", reqConsumable.hdef);
         return null;
+    }
+
+    function getCopperCostinfoForAsset(asset) {
+        return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){ return item.icon == asset.icon; })[0].costinfo.filter(function(costinfo){ return costinfo.hitemdef == "@ItemDef[Resources]"; })[0];
     }
 
     function getCopperCostinfo(consumable) {
@@ -837,92 +979,22 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         return null;
     }
 
-    function getCopperCostinfoForAsset(asset) {
-        return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){ return item.icon == asset.icon; })[0].costinfo.filter(function(costinfo){ return costinfo.hitemdef == "@ItemDef[Resources]"; })[0];
-    }
 
-
-    function getAvailableCopper() {
-        return unsafeWindow.client.dataModel.model.vendor.items[0].costinfo[0].availablecount;
-    }
-
-    function getCopperCost(task) {
-        var copperCost = 0;
-        for (var i = 0; i < task.children.length; i++) {
-            var child = task.children[i];
-            copperCost += getCopperCost(child);
-        }
-        if (task.copperCost) {
-            copperCost += task.copperCost;
-        }
-        console.log(task.def.displayname, "has a total copper cost of", copperCost);
-        return copperCost;
-    }
-
-    function calculateDuration(task) {
-        var duration = task.def.duration;
-        for (var i = 0; i < task.children.length; i++) {
-            var child = task.children[i];
-            duration += calculateDuration(child);
-        }
-        return duration;
-    }
-
-    function sortByProfessionXP(a, b) {
-        return sort(a, b, filterByProfessionXP);
-    }
-
-    function sortByXP(a, b) {
-        return sort(a, b, filterByXP);
-    }
-
-    function sortByCopper(a, b) {
-        return sort(a, b, filterByCopper);
-    }
-
-    function sortByRP(a, b) {
-        return sort(a, b, filterByRP);
-    }
-
-    function sort(taskA, taskB, filter) {
-        var taskARewards = getRewards(taskA).filter(filter);
-        var taskARewardTotal = 0;
-        for (var i = 0; i < taskARewards.length; i++) {
-            var reward = taskARewards[i];
-            taskARewardTotal += reward.count;
-        }
-        var taskBRewards = getRewards(taskB).filter(filter);
-        var taskBRewardTotal = 0;
-        for (var i = 0; i < taskBRewards.length; i++) {
-            var reward = taskBRewards[i];
-            taskBRewardTotal += reward.count;
-        }
-        //console.log("DEBUG 1:", taskA.def.displayname, taskARewardTotal, taskARewardTotal/calculateDuration(taskA));
-        //console.log("DEBUG 2:", taskB.def.displayname, taskBRewardTotal, taskBRewardTotal/calculateDuration(taskB));
-        //console.log("DEBUG 3:", taskBRewardTotal/calculateDuration(taskB) - taskARewardTotal/calculateDuration(taskA));
-        return taskBRewardTotal/calculateDuration(taskB) - taskARewardTotal/calculateDuration(taskA);
-    }
-
-    function filterByProfessionXP(reward) {
-        //console.log("DEBUG:", reward.hdef);
-        return /@ItemDef\[(?:Xp_Crafting_\w+|Potion_Unstable_\d+)\]/.exec(reward.hdef) !== null;
-    }
-
-    function filterByXP(reward) {
-        return reward.hdef == "@ItemDef[XP]";
-    }
-
-    function filterByCopper(reward) {
-         return reward.hdef == "@ItemDef[Resources]";
-    }
-
-    function filterByRP(reward) {
-        return /@ItemDef\[\w+_Rp\]/.exec(reward.hdef) !== null;
-    }
-
+    /**
+     * Iterative approach to finding the next task to assign to an open slot.
+     *
+     * @param {Array} prof The tasklist for the profession being used
+     * @param {int} i The current task number being attempted
+     */
     function createNextTask(tasks, i) {
         if (tasks === null || i+1 > tasks.length) {
-            return;
+            console.log("Unable to select a task, the task list is empty");
+            return false;
+        }
+        if (!unsafeWindow.client.dataModel.model.craftinglist || unsafeWindow.client.dataModel.model.craftinglist === null || !unsafeWindow.client.dataModel.model.craftinglist['craft_' + tasks.craftName] || unsafeWindow.client.dataModel.model.craftinglist['craft_' + tasks.craftName] === null) {
+            console.log('Task list not loaded for:', tasks.craftName);
+            window.setTimeout(function() { createNextTask(tasks, i); }, delay.SHORT);
+            return false;
         }
         var task = getNextTask(tasks[i]);
         if (!gatherResources(task)) {
@@ -991,13 +1063,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         });
     }
 
-    function buyAsset(asset) {
-        unsafeWindow.client.sendCommand("GatewayVendor_PurchaseVendorItem", { vendor: 'Nw_Gateway_Professions_Merchant', store: 'Store_Crafting_Assets', idx: getStoreIndex(asset), count: 1 });
-        WaitForState("button.closeNotification").done(function() {
-            $("button.closeNotification").click();
-        });
-    }
-
     function getStoreIndex(itemToFind) {
         return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){
             if (itemToFind.hdef) {
@@ -1008,6 +1073,28 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         })[0].storeindex;
     }
 
+    function buyAsset(asset) {
+        unsafeWindow.client.sendCommand("GatewayVendor_PurchaseVendorItem", { vendor: 'Nw_Gateway_Professions_Merchant', store: 'Store_Crafting_Assets', idx: getStoreIndex(asset), count: 1 });
+        WaitForState("button.closeNotification").done(function() {
+            $("button.closeNotification").click();
+        });
+    }
+    
+    /**
+     * Fills resource slots and begins a profession task
+     *
+     * @param {string} taskDetail The craftindetail object for the task to be started
+     */
+     /*
+    function startTask(taskDetail) {
+        return;
+        
+        unsafeWindow.client.professionFetchTaskDetail(taskDetail.def.name);
+        //client.dataModel.addDefaultResources();
+        client.professionStartAssignment(taskDetail.def.name);
+    }
+    */
+
     /**
      * Selects the highest level asset for the i'th button in the list. Uses an iterative approach
      * in order to apply a sufficient delay after the asset is assigned
@@ -1016,7 +1103,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      * @param {int} i The current iteration number. Will select assets for the i'th button
      * @param {Deferred} jQuery Deferred object to resolve when all of the assets have been assigned
      */
-    function SelectItemFor(buttonListIn, i, def, entries) {
+    function SelectItemFor(buttonListIn, i, def, prof) {
         buttonListIn[i].click();
         WaitForState("").done(function() {
             var specialItems = $("div.modal-item-list a.Special");
@@ -1026,7 +1113,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             var clicked = false;
 
             // Try to avoid using up higher rank assets needlessly
-            if (entries.craftName === "Leadership") {
+            if (prof.taskName === "Leadership") {
                 var mercenarys = $("div.modal-item-list a.Bronze:contains('Mercenary')");
                 var guards = $("div.modal-item-list a.Bronze:contains('Guard')");
                 var footmen = $("div.modal-item-list a.Bronze:contains('Footman')");
@@ -1046,12 +1133,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 else { $("button.close-button").click(); }
             }
 
-            console.log("Clicked item");
+            //console.log("Clicked item");
             WaitForState("").done(function() {
                 // Get the new set of select buttons created since the other ones are removed when the asset loads
                 var buttonList = $("h3:contains('Optional Assets:')").closest("div").find("button");
                 if (i < buttonList.length - 1) {
-                    SelectItemFor(buttonList, i+1, def, entries);
+                    SelectItemFor(buttonList, i+1, def, prof);
                 }
                 else {
                     // Let main loop continue
@@ -1065,12 +1152,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         if (settings.refinead) {
             var _currencies = unsafeWindow.client.dataModel.model.ent.main.currencies;
             if (_currencies.diamondsconvertleft && _currencies.roughdiamonds) {
-                console.log("Refining AD");
+                //console.log("Refining AD");
                 unsafeWindow.client.sendCommand('Gateway_ConvertNumeric', 'Astral_Diamonds');
             }
         }
 
-        console.log("Switching Characters");
+        //console.log("Switching Characters");
         if (++charcurrent >= settings.charcount) { charcurrent = 0; }
         GM_setValue("charcurrent", charcurrent);
         dfdNextRun.resolve(delay.SHORT);
@@ -1081,11 +1168,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
      *
      * @return {Deferred} A jQuery defferred object that will be resolved when loading is complete
      */
-     /*
     function WaitForLoad() {
         return WaitForState("");
     }
-    */
     /**
      * Creates a deferred object that will be resolved when the state is reached
      *
@@ -1138,7 +1223,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         // Check for Gateway down
         if (window.location.href.indexOf("gatewaysitedown") > -1) {
             // Do a long delay and then retry the site
-            console.log("Gateway down detected - relogging in " + (delay.MINS/1000) + " seconds");
+            console.log("Gateway down detected - relogging in "+(delay.MINS/1000)+" seconds");
             window.setTimeout(function() {unsafeWindow.location.href = "http://gateway.playneverwinter.com";}, delay.MINS);
             return;
         }
@@ -1173,7 +1258,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         s_paused = settings.paused; // let the Page Reloading function know the pause state
         if (settings.paused) {
             // Just continue later - the deferred object is still set and nothing will resolve it until we get past this point
-            window.setTimeout(function() {process();}, delay.DEFAULT);
+            var timerHandle = window.setTimeout(function() {process();}, delay.DEFAULT);
             return;
         } 
 
@@ -1184,12 +1269,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 charcurrent = 0;
             }
             for (var i = 0; i < (charSettings.length/settings.charcount); i++) {
-                var j = i + (charcurrent*charSettings.length/settings.charcount);
+                var j = i+(charcurrent*charSettings.length/settings.charcount);
                 settings[charSettings[j].name.replace(new RegExp(charcurrent+"$"),'')] = settings[charSettings[j].name];
             }
 
             var charName = settings.nw_charname;
-            var fullCharName = charName + '@' + accountName;
+            var fullCharName = charName+'@'+accountName;
 
             if (unsafeWindow.client.getCurrentCharAtName() != fullCharName) {
                 loadCharacter(fullCharName);
@@ -1200,7 +1285,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             if (processCharacter()) { return; }
 
             // Switch characters as necessary
-            //delay.CHAR;
+            delay.CHAR;
             switchChar();
         }
     }
@@ -1397,7 +1482,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         // Get each value from the UI
         for (var i = 0; i < settingnames.length; i++) {
             var name = settingnames[i].name;
-            var el = $('#settings_' + name);
+            var el = $('#settings_'+name);
             var value = false;
             switch(settingnames[i].type) {
                 case "checkbox":
@@ -1416,7 +1501,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                     continue;
             }
             if (typeof(settingnames[i].onsave) === "function") {
-                console.log("Calling 'onsave' for", name);
+                //console.log("Calling 'onsave' for", name);
                 settingnames[i].onsave(value, settings[name]);
             }
             if (settings[name] !== value) { settings[name] = value; } // Save to local cache
@@ -1437,7 +1522,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                     value = el.prop("checked");
                     break;
             }
-            console.log(settings, name, el, value);
+            //console.log(settings, name, el, value);
             if (settings[name] !== value) { settings[name] = value; } // Save to local cache
             if (GM_getValue(name) !== value) { GM_setValue(name, value); } // Save to GM cache
         }
@@ -1450,13 +1535,14 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         }
 
         // Delete all saved settings
+        /*
         if (settingwipe) {
-
             var keys = GM_listValues();
             for (var i = 0; i < keys.length; i++) {
                 GM_deleteValue(keys[i]);
             }
         }
+        */
         
         // Close the panel
         $("#settingsButton").show();
