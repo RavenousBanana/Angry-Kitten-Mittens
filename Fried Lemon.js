@@ -838,7 +838,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     function requiresBagSpace(reward) {
         //console.log("DEBUG:", reward, reward.hdef, !~reward.hdef.indexOf('Crafting'));
-        return !~reward.hdef.indexOf('Crafting');
+        if (reward.hdef) {
+            return !~reward.hdef.indexOf('Crafting');
+        } else if(reward.hitem) {
+            return !~reward.hitem.indexOf('Crafting');
+        }
+        return true;
     }
 
     function getBagSpace() {
@@ -846,7 +851,49 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         unsafeWindow.client.dataModel.model.ent.main.inventory.playerbags.forEach(function(playerbag) {
             emptySlots += playerbag.slots.filter(function(slot) { return slot === null; }).length;
         });
-        return emptySlots;
+        return emptySlots - getPendingBagSpace();
+    }
+
+    function getPendingBagSpace() {
+        var pendingSlots = 0;
+        unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.forEach(function(assignment) {
+            if (assignment.category === "None") {
+                return;
+            }
+            console.log(assignment.hdef);
+            var match = /@ItemAssignmentDef\[(\w+)\]/.exec(assignment.hdef);
+            if (match === null || match.length < 2) {
+                console.log("ERROR: Cannot find bag space requirement for "+assignment.displayname+" (match: "+match+"); preventing inventory slot usage until the issue is resolved");
+                pendingSlots += 999; // This will stop any bag space being used until we can resolve the issue.
+                return;
+            }
+            var hdef = match[1];
+            var task = findTask(assignment.category, hdef);
+            if (task === null) {
+                console.log("ERROR: Cannot find bag space requirement for "+assignment.displayname+" (task: "+task+"); preventing inventory slot usage until the issue is resolved");
+                pendingSlots += 999; // This will stop any bag space being used until we can resolve the issue.
+                return;
+            }
+            console.log(task);
+            task.rewards.forEach(function(reward) {
+                if (requiresBagSpace(reward)) {
+                    pendingSlots++;
+                }
+            } );
+        } );
+        return pendingSlots;
+    }
+
+    function findTask(category, hdef) {
+        var profession = unsafeWindow.client.dataModel.model.craftinglist["craft_"+category];
+        if (typeof profession === "undefined") {
+            console.log("ERROR: "+category+" not found in crafting list; failed to find task ("+hdef+")");
+            return null;
+        }
+        var task = profession.entries.filter(function(entry) {
+            return typeof entry.def !== "undefined" && entry.def !== null && entry.def.name === hdef;
+        } )[0];
+        return typeof task !== "undefined" ? task : null;
     }
 
     function sufficientCopper(task) {
@@ -901,7 +948,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         for (var i = 0; i < consumables.length; i++) {
             var consumable = consumables[i];
             //console.log(currentTask.def.displayname, "requires", consumable.hdef);
-            if (!canBuyConsumable(consumable)) {
+            if (!canBuy(consumable)) {
                 var reducedTasks = removeCurrentTask(currentTask, tasks);
                 var reqTask = findTaskForConsumable(consumable, reducedTasks);
                 if (reqTask && findChildren(reqTask, reducedTasks)) {
@@ -920,7 +967,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         for (var j = 0; j < assets.length; j++) {
             var asset = assets[j];
             //console.log(currentTask.def.displayname, "requires", asset.icon);
-            if (!canBuyAsset(asset)) {
+            if (!canBuy(asset)) {
                 var task = findTaskForAsset(asset, tasks);
                 if (task && findChildren(task, tasks)) {
                     //console.log(asset.icon, "can be aquired from the", currentTask.def.displayname, "task");
@@ -937,9 +984,16 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         return true;
     }
 
-    function canBuyConsumable(consumable) {
+    function canBuy(itemToFind) {
         return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){
-            return item.hdef == consumable.hdef;
+            if (itemToFind.hdef) {
+                return item.hdef === itemToFind.hdef;
+            } else if (itemToFind.icon) {
+                return item.icon === itemToFind.icon;
+            } else if (itemToFind.hitem) {
+                return item.hdef === itemToFind.hitem;
+            }
+            return false;
         }).length > 0;
     }
 
@@ -973,12 +1027,6 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     function getCopperCostinfo(consumable) {
         return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){ return item.hdef == consumable.hdef; })[0].costinfo.filter(function(costinfo){ return costinfo.hitemdef == "@ItemDef[Resources]"; })[0];
-    }
-
-    function canBuyAsset(asset) {
-        return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){
-            return item.icon == asset.icon;
-        }).length > 0;
     }
 
     function findTaskForAsset(asset, tasks) {
