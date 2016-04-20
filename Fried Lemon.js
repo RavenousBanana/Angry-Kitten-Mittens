@@ -851,10 +851,11 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
         unsafeWindow.client.dataModel.model.ent.main.inventory.playerbags.forEach(function(playerbag) {
             emptySlots += playerbag.slots.filter(function(slot) { return slot === null; }).length;
         });
-        return emptySlots - getPendingBagSpace();
+        return Math.max(emptySlots - getPendingBagSpace(), 0);
     }
 
     function getPendingBagSpace() {
+        // TODO: If the maximum amount of a task (usually 3) are in progress this code fails miserably.
         var pendingSlots = 0;
         unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.forEach(function(assignment) {
             if (assignment.category === "None") {
