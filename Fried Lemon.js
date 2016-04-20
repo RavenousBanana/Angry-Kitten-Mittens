@@ -887,7 +887,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     function findTask(category, hdef) {
         var profession = unsafeWindow.client.dataModel.model.craftinglist["craft_"+category];
-        if (typeof profession === "undefined") {
+        if (typeof profession === "undefined" || profession === null) {
             console.log("ERROR: "+category+" not found in crafting list; failed to find task ("+hdef+")");
             return null;
         }
