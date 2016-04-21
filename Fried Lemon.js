@@ -864,15 +864,15 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
             console.log(assignment.hdef);
             var match = /@ItemAssignmentDef\[(\w+)\]/.exec(assignment.hdef);
             if (match === null || match.length < 2) {
-                console.log("ERROR: Cannot find bag space requirement for "+assignment.displayname+" (match: "+match+"); preventing inventory slot usage until the issue is resolved");
-                pendingSlots += 999; // This will stop any bag space being used until we can resolve the issue.
+                console.log("ERROR: Cannot find bag space requirement for "+assignment.displayname+" (match: "+match+")");
+                pendingSlots += 1;
                 return;
             }
             var hdef = match[1];
             var task = findTask(assignment.category, hdef);
             if (task === null) {
-                console.log("ERROR: Cannot find bag space requirement for "+assignment.displayname+" (task: "+task+"); preventing inventory slot usage until the issue is resolved");
-                pendingSlots += 999; // This will stop any bag space being used until we can resolve the issue.
+                console.log("ERROR: Cannot find bag space requirement for "+assignment.displayname+" (task: "+task+")");
+                pendingSlots += 1;
                 return;
             }
             console.log(task);
