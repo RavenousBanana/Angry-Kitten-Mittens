@@ -1057,7 +1057,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
         if (tasks === null || i+1 > tasks.length) {
             console.log("Unable to select a task, the task list is empty");
-            dfdNextRun.resolve(delay.SHORT);
+            window.setTimeout(function() {
+                switchChar();
+            }, delay.CHAR);
             return false;
         }
         if (!unsafeWindow.client.dataModel.model.craftinglist || unsafeWindow.client.dataModel.model.craftinglist === null || !unsafeWindow.client.dataModel.model.craftinglist['craft_' + tasks.craftName] || unsafeWindow.client.dataModel.model.craftinglist['craft_' + tasks.craftName] === null) {
