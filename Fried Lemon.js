@@ -9,7 +9,7 @@
 // @include        http://gateway.playneverwinter.com
 // @include        http://gateway.playneverwinter.com/*
 // @include        http://gatewaysitedown.playneverwinter.com
-// @include        http://gatewaysitedown.playneverwinter.com/* 
+// @include        http://gatewaysitedown.playneverwinter.com/* pr
 // @originalAuthor Mustex
 // @modifiedBy     Bunta, RavenousBanana
 // @version        2.0.0
@@ -607,7 +607,7 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
                 var profession = professions[i];
 
                 // Filter the current tasks by profession
-                var currentTasks = unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.filter(function(task) { return task.category === profession.Name; });
+                var currentTasks = unsafeWindow.client.dataModel.model.ent.main.itemassignments.assignments.filter(function(task) { return task.category === profession.name; });
 
                 // Check if we have filled our quota for the profession
                 if (currentTasks.length < settings[profession.name]) {
