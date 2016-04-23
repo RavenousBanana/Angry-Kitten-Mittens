@@ -839,9 +839,9 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
     function requiresBagSpace(reward) {
         //console.log("DEBUG:", reward, reward.hdef, !~reward.hdef.indexOf('Crafting'));
         if (reward.hdef) {
-            return !~reward.hdef.indexOf('Crafting');
+            return !~reward.hdef.indexOf('Crafting') && !~reward.hdef.indexOf('Resource');
         } else if(reward.hitem) {
-            return !~reward.hitem.indexOf('Crafting');
+            return !~reward.hitem.indexOf('Crafting') && !~reward.hitem.indexOf('Resource');
         }
         return true;
     }
