@@ -987,12 +987,12 @@ var s_paused = false;      // extend the paused setting to the Page Reloading fu
 
     function canBuy(itemToFind) {
         return unsafeWindow.client.dataModel.model.vendor.items.filter(function(item){
-            if (itemToFind.hdef) {
-                return item.hdef === itemToFind.hdef;
+            if (itemToFind.hitem) {
+                return item.hdef === itemToFind.hitem;
             } else if (itemToFind.icon) {
                 return item.icon === itemToFind.icon;
-            } else if (itemToFind.hitem) {
-                return item.hdef === itemToFind.hitem;
+            } else if (itemToFind.hdef) {
+                return item.hdef === itemToFind.hdef;
             }
             return false;
         }).length > 0;
